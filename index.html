@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C0F20">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="آزمون تعاملی شیمی دوازدهم — انتخاب سطح متوسط یا سخت">
+<title>شیمی دوازدهم — انتخاب آزمون</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<style>
+@font-face{font-family:'Vazirmatn';src:url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2') format('woff2-variations');font-weight:100 900;font-display:swap}
+:root{
+  --paper:#0C0F20;--surface:#161B33;--surface-2:#1E2445;--sunken:#11162E;
+  --ink:#F4F6FF;--ink-2:#B7BFE2;--ink-3:#8890B8;
+  --hair:rgba(255,255,255,.10);--hair-2:rgba(255,255,255,.20);
+  --violet:#7C5CFF;--cyan:#22D3EE;--coral:#FF7A59;--amber:#FFC24B;
+  --success:#3DDC97;--weak:#FF6B81;
+  --r-m:14px;--r-l:20px;--r-xl:28px;--r-full:999px;
+  --e2:0 10px 30px rgba(0,0,0,.35);--e3:0 24px 60px rgba(0,0,0,.45);
+  --ease:cubic-bezier(.22,.9,.28,1);
+  --sat:env(safe-area-inset-top);--sab:env(safe-area-inset-bottom);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--paper);color:var(--ink);min-height:100dvh;
+  font-feature-settings:'ss02';-webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;align-items:center;
+  padding:calc(var(--sat) + 26px) 18px calc(var(--sab) + 26px);
+  position:relative;overflow-x:hidden;
+}
+body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(70px);opacity:.5;pointer-events:none;z-index:0}
+body::before{width:340px;height:340px;background:radial-gradient(circle,#7C5CFF,transparent 70%);top:-140px;inset-inline-end:-120px}
+body::after{width:320px;height:320px;background:radial-gradient(circle,#FF7A59,transparent 70%);bottom:-150px;inset-inline-start:-130px}
+.wrap{position:relative;z-index:1;width:100%;max-width:520px;display:flex;flex-direction:column;gap:20px}
+
+.brand{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}
+.logo{width:64px;height:64px;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:30px;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));box-shadow:var(--e2),0 0 40px rgba(124,92,255,.45)}
+h1{margin:0;font-size:23px;font-weight:900;letter-spacing:-.3px;line-height:1.5}
+.sub{margin:0;font-size:13.5px;font-weight:600;color:var(--ink-3);line-height:1.9;max-width:32ch}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:2px}
+.chip{font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:var(--r-full);background:rgba(255,255,255,.06);border:1px solid var(--hair);color:var(--ink-2)}
+
+.card{
+  position:relative;display:block;text-decoration:none;color:inherit;
+  background:linear-gradient(180deg,var(--surface),var(--sunken));
+  border:1px solid var(--hair);border-radius:var(--r-xl);padding:20px;
+  box-shadow:var(--e2);overflow:hidden;
+  transition:transform var(--ease) .22s,border-color var(--ease) .22s,box-shadow var(--ease) .22s;
+}
+.card::before{content:'';position:absolute;inset-block:0;inset-inline-start:0;width:5px;background:var(--accent)}
+.card:active{transform:scale(.985)}
+@media(hover:hover){.card:hover{transform:translateY(-3px);border-color:var(--hair-2);box-shadow:var(--e3)}}
+.card.a{--accent:linear-gradient(180deg,#7C5CFF,#22D3EE)}
+.card.b{--accent:linear-gradient(180deg,#FF7A59,#FFC24B)}
+.chead{display:flex;align-items:center;gap:12px}
+.badge{flex:0 0 auto;width:46px;height:46px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900}
+.card.a .badge{background:rgba(124,92,255,.18);border:1px solid rgba(124,92,255,.45);color:#CBBEFF}
+.card.b .badge{background:rgba(255,122,89,.16);border:1px solid rgba(255,122,89,.45);color:#FFC9B4}
+.ctitle{margin:0;font-size:17.5px;font-weight:900}
+.cmeta{margin:4px 0 0;font-size:12px;font-weight:700;color:var(--ink-3)}
+.cdesc{margin:14px 0 0;font-size:13.5px;font-weight:600;line-height:2;color:var(--ink-2)}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tag{font-size:11px;font-weight:800;padding:5px 10px;border-radius:var(--r-full);background:rgba(255,255,255,.05);border:1px solid var(--hair);color:var(--ink-3)}
+
+.prog{margin-top:16px;padding-top:14px;border-top:1px dashed var(--hair)}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;color:var(--ink-2)}
+.bar{margin-top:8px;height:8px;border-radius:var(--r-full);background:rgba(255,255,255,.07);overflow:hidden}
+.fill{height:100%;width:0;border-radius:var(--r-full);transition:width .5s var(--ease)}
+.card.a .fill{background:linear-gradient(90deg,#7C5CFF,#22D3EE)}
+.card.b .fill{background:linear-gradient(90deg,#FF7A59,#FFC24B)}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.stat{font-size:11px;font-weight:800;padding:5px 10px;border-radius:var(--r-full);border:1px solid var(--hair);color:var(--ink-2);background:rgba(255,255,255,.04)}
+.stat b{font-weight:900}
+.stat.s{color:#B7F4DA;border-color:rgba(61,220,151,.35);background:rgba(61,220,151,.12)}
+.stat.k{color:#FFE3A8;border-color:rgba(255,194,75,.35);background:rgba(255,194,75,.12)}
+.stat.w{color:#FFC2CB;border-color:rgba(255,107,129,.35);background:rgba(255,107,129,.12)}
+.cta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;
+  border-radius:var(--r-m);padding:12px 16px;font-size:14px;font-weight:900;
+  background:rgba(255,255,255,.06);border:1px solid var(--hair)}
+.card.a .cta{background:rgba(124,92,255,.16);border-color:rgba(124,92,255,.4);color:#DCD3FF}
+.card.b .cta{background:rgba(255,122,89,.14);border-color:rgba(255,122,89,.4);color:#FFD9CB}
+.arrow{font-size:17px;line-height:1}
+
+.tools{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ghost{appearance:none;cursor:pointer;font-family:inherit;font-size:12px;font-weight:800;color:var(--ink-3);
+  background:rgba(255,255,255,.04);border:1px solid var(--hair);border-radius:var(--r-full);padding:10px 16px;
+  transition:color var(--ease) .2s,border-color var(--ease) .2s}
+@media(hover:hover){.ghost:hover{color:var(--ink);border-color:var(--hair-2)}}
+.note{margin:0;text-align:center;font-size:11.5px;font-weight:600;color:var(--ink-3);line-height:2}
+footer{margin-top:4px;text-align:center;font-size:12px;font-weight:700;color:var(--ink-3);line-height:2.2}
+footer a{color:var(--cyan);text-decoration:none;font-weight:900}
+.toast{position:fixed;inset-inline:0;bottom:calc(var(--sab) + 18px);display:flex;justify-content:center;z-index:9;pointer-events:none;opacity:0;transform:translateY(10px);transition:.25s var(--ease)}
+.toast.on{opacity:1;transform:none}
+.toast span{background:var(--surface-2);border:1px solid var(--hair-2);border-radius:var(--r-full);padding:10px 18px;font-size:12.5px;font-weight:800;box-shadow:var(--e2)}
+@media(max-width:360px){h1{font-size:21px}.ctitle{font-size:16.5px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="brand">
+    <div class="logo">⚗️</div>
+    <h1>آزمون تعاملی شیمی دوازدهم</h1>
+    <p class="sub">جمع‌بندی ۳۳ دورهٔ امتحان نهایی (۹۷ تا ۱۴۰۵) با پاسخ‌نامهٔ کامل گام‌به‌گام</p>
+    <div class="chips">
+      <span class="chip">۳۲ سؤال تشریحی</span>
+      <span class="chip">بهینه برای موبایل</span>
+      <span class="chip">ذخیرهٔ خودکار پیشرفت</span>
+    </div>
+  </header>
+
+  <a class="card a" href="exam-a.html" id="card-a">
+    <div class="chead">
+      <div class="badge">A</div>
+      <div>
+        <h2 class="ctitle">نسخهٔ متوسط</h2>
+        <p class="cmeta">۱۶ سؤال · ۲۰ نمره · حدود ۷۵ دقیقه</p>
+      </div>
+    </div>
+    <p class="cdesc">سؤال‌های پرتکرار و استاندارد امتحان نهایی؛ مناسب شروع مرور و تثبیت مفاهیم پایه.</p>
+    <div class="tags">
+      <span class="tag">مفاهیم پایه</span><span class="tag">محاسبات متوسط</span><span class="tag">شروع مرور</span>
+    </div>
+    <div class="prog">
+      <div class="prow"><span id="lbl-a">هنوز شروع نکرده‌ای</span><span id="pct-a">۰٪</span></div>
+      <div class="bar"><div class="fill" id="fill-a"></div></div>
+      <div class="stats" id="stats-a" hidden></div>
+    </div>
+    <div class="cta"><span id="cta-a">شروع آزمون متوسط</span><span class="arrow">←</span></div>
+  </a>
+
+  <a class="card b" href="exam-b.html" id="card-b">
+    <div class="chead">
+      <div class="badge">B</div>
+      <div>
+        <h2 class="ctitle">نسخهٔ سخت</h2>
+        <p class="cmeta">۱۶ سؤال · ۲۰ نمره · حدود ۸۵ دقیقه</p>
+      </div>
+    </div>
+    <p class="cdesc">سؤال‌های چندبخشی، محاسبات سنگین‌تر و تحلیلی؛ برای رسیدن به نمرهٔ کامل و آمادگی نهایی.</p>
+    <div class="tags">
+      <span class="tag">محاسبات پیشرفته</span><span class="tag">تحلیل نمودار</span><span class="tag">آمادگی نهایی</span>
+    </div>
+    <div class="prog">
+      <div class="prow"><span id="lbl-b">هنوز شروع نکرده‌ای</span><span id="pct-b">۰٪</span></div>
+      <div class="bar"><div class="fill" id="fill-b"></div></div>
+      <div class="stats" id="stats-b" hidden></div>
+    </div>
+    <div class="cta"><span id="cta-b">شروع آزمون سخت</span><span class="arrow">←</span></div>
+  </a>
+
+  <div class="tools">
+    <button class="ghost" id="resume" hidden>ادامهٔ آخرین آزمون</button>
+    <button class="ghost" id="reset">پاک کردن پیشرفت</button>
+  </div>
+  <p class="note">پیشرفتِ مطالعه‌ات با کوکی روی همین مرورگر ذخیره می‌شود؛ هر وقت برگردی از همان‌جا ادامه می‌دهی.</p>
+
+  <footer>
+    توسعه‌دهنده: <a href="https://t.me/forkcode" target="_blank" rel="noopener">@forkcode</a>
+    · ارتباط مستقیم: <a href="https://t.me/Oxmit" target="_blank" rel="noopener">@Oxmit</a>
+  </footer>
+</div>
+
+<div class="toast" id="toast"><span id="toast-text"></span></div>
+
+<script>
+(function(){
+  var FA = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  function fa(v){ return String(v).replace(/\d/g, function(d){ return FA[+d]; }); }
+  function $(id){ return document.getElementById(id); }
+
+  /* ---------- cookies ---------- */
+  function getCookie(name){
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()\[\]\\\/+^])/g,'\\$1') + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function setCookie(name, value, days){
+    document.cookie = name + '=' + encodeURIComponent(value) +
+      '; path=/; max-age=' + (days ? days*86400 : 0) + '; samesite=lax';
+  }
+  function delCookie(name){ document.cookie = name + '=; path=/; max-age=0; samesite=lax'; }
+
+  var COOKIES = { a: 'chem12_progress_a', b: 'chem12_progress_b' };
+  var LAST = 'chem12_last_exam';
+  var TOTAL = 16;
+
+  function readProgress(key){
+    var raw = getCookie(COOKIES[key]);
+    if(!raw) return null;
+    try {
+      var p = JSON.parse(raw);
+      if(typeof p.done !== 'number') return null;
+      p.total = p.total || TOTAL;
+      return p;
+    } catch(e){ return null; }
+  }
+
+  function stat(cls, label, n){
+    return '<span class="stat ' + cls + '"><b>' + fa(n) + '</b> ' + label + '</span>';
+  }
+
+  function render(key, startLabel){
+    var p = readProgress(key);
+    var pct = p ? Math.min(100, Math.round(p.done / p.total * 100)) : 0;
+    $('fill-' + key).style.width = pct + '%';
+    $('pct-' + key).textContent = fa(pct) + '٪';
+    var box = $('stats-' + key);
+
+    if(!p || p.done === 0){
+      $('lbl-' + key).textContent = 'هنوز شروع نکرده‌ای';
+      $('cta-' + key).textContent = startLabel;
+      box.hidden = true; box.innerHTML = '';
+      return false;
+    }
+    if(p.done >= p.total){
+      $('lbl-' + key).textContent = 'کامل شد ✓ — آمادهٔ مرور دوباره';
+      $('cta-' + key).textContent = 'مرور دوباره';
+    } else {
+      $('lbl-' + key).textContent = 'تا سؤال ' + fa(p.done) + ' از ' + fa(p.total) + ' خوانده‌ای';
+      $('cta-' + key).textContent = 'ادامه از سؤال ' + fa(Math.min(p.total, p.done + 1));
+    }
+    var html = '';
+    if(p.strong) html += stat('s', 'بلد بودم', p.strong);
+    if(p.shaky)  html += stat('k', 'با شک', p.shaky);
+    if(p.weak)   html += stat('w', 'بلد نبودم', p.weak);
+    box.innerHTML = html;
+    box.hidden = !html;
+    return true;
+  }
+
+  var hasA = render('a', 'شروع آزمون متوسط');
+  var hasB = render('b', 'شروع آزمون سخت');
+
+  /* ---------- resume last exam ---------- */
+  var last = getCookie(LAST);
+  if(last === 'a' || last === 'b'){
+    var live = (last === 'a') ? hasA : hasB;
+    if(live){
+      var btn = $('resume');
+      btn.hidden = false;
+      btn.textContent = 'ادامهٔ ' + (last === 'a' ? 'نسخهٔ متوسط' : 'نسخهٔ سخت');
+      btn.addEventListener('click', function(){ location.href = 'exam-' + last + '.html'; });
+    }
+  }
+
+  /* ---------- remember choice ---------- */
+  ['a','b'].forEach(function(k){
+    $('card-' + k).addEventListener('click', function(){ setCookie(LAST, k, 365); });
+  });
+
+  /* ---------- toast ---------- */
+  var tTimer;
+  function toast(msg){
+    $('toast-text').textContent = msg;
+    $('toast').classList.add('on');
+    clearTimeout(tTimer);
+    tTimer = setTimeout(function(){ $('toast').classList.remove('on'); }, 2200);
+  }
+
+  /* ---------- reset ---------- */
+  $('reset').addEventListener('click', function(){
+    if(!confirm('همهٔ پیشرفت هر دو آزمون پاک شود؟')) return;
+    delCookie(COOKIES.a); delCookie(COOKIES.b); delCookie(LAST);
+    try {
+      ['chem12examA_session','chem12examB_session','chem12examA_intro_seen','chem12examB_intro_seen']
+        .forEach(function(k){ localStorage.removeItem(k); });
+    } catch(e){}
+    render('a', 'شروع آزمون متوسط');
+    render('b', 'شروع آزمون سخت');
+    $('resume').hidden = true;
+    toast('پیشرفت پاک شد');
+  });
+
+  /* refresh when returning from an exam via back button */
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden){ render('a','شروع آزمون متوسط'); render('b','شروع آزمون سخت'); }
+  });
+})();
+</script>
+</body>
+</html>

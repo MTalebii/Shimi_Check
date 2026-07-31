@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#0C0F20">
+<meta name="color-scheme" content="dark">
+<title>شیمی دوازدهم — آزمون B (سطح سخت)</title>
+<style>
+@font-face{font-family:'Vazirmatn';font-style:normal;font-weight:400 800;font-display:swap;src:url(https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn%5Bwght%5D.woff2) format('woff2');}
+
+/* ============ DESIGN TOKENS ============ */
+:root{
+  /* surface */
+  --paper:#0C0F20; --surface:#161B33; --surface-2:#1E2445; --sunken:#11162E;
+  /* ink */
+  --ink:#F4F6FF; --ink-2:#B7BFE2; --ink-3:#8890B8;
+  --hair:rgba(255,255,255,.10); --hair-2:rgba(255,255,255,.20);
+  /* accent (per-exam override below) */
+  --primary:#7C5CFF; --primary-2:#22D3EE; --primary-ink:#CBBEFF;
+  --primary-soft:rgba(124,92,255,.18);
+  --grad:linear-gradient(135deg,var(--primary),var(--primary-2));
+  /* semantic */
+  --success:#3DDC97; --success-ink:#B7F4DA; --success-soft:rgba(61,220,151,.14);
+  --warn:#FFC24B; --warn-ink:#FFE3A8; --warn-soft:rgba(255,194,75,.14);
+  --weak:#FF6B81; --weak-ink:#FFC2CC; --weak-soft:rgba(255,107,129,.14);
+  --focus:#22D3EE;
+  /* space */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s7:32px; --s8:40px; --s9:56px;
+  /* radius */
+  --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-full:999px;
+  /* elevation */
+  --e1:0 1px 2px rgba(0,0,0,.35);
+  --e2:0 2px 14px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.25);
+  --e3:0 22px 60px rgba(0,0,0,.55);
+  --glow:0 8px 26px rgba(124,92,255,.35);
+  /* motion */
+  --ease:cubic-bezier(.22,.9,.28,1); --fast:150ms; --base:240ms;
+  /* safe areas */
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',sans-serif;
+  direction:rtl; text-align:right;
+  background:var(--paper); color:var(--ink);
+  font-size:16px; line-height:1.85; font-weight:400;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  overscroll-behavior-y:none; -webkit-tap-highlight-color:transparent;
+}
+::selection{background:var(--primary);color:#fff}
+button{font:inherit;color:inherit;margin:0}
+:focus-visible{outline:2.5px solid var(--focus);outline-offset:2px;border-radius:8px}
+
+/* ============ APP FRAME ============ */
+#app{
+  position:relative; width:100%;
+  max-width:560px; margin:0 auto;
+  min-height:100svh; min-height:100dvh;
+  background:
+    radial-gradient(120% 60% at 100% 0%, var(--primary-soft) 0%, transparent 60%),
+    radial-gradient(100% 50% at 0% 100%, rgba(34,211,238,.10) 0%, transparent 60%),
+    var(--paper);
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+@media (min-width:600px){#app{box-shadow:0 0 0 1px var(--hair),0 30px 80px rgba(0,0,0,.5)}}
+
+/* ---- masthead ---- */
+.mast{
+  flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
+  gap:var(--s3); padding:calc(var(--sat) + 10px) var(--s4) 10px;
+  background:rgba(12,15,32,.75); backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom:1px solid var(--hair); position:relative; z-index:20;
+}
+.mast::after{content:'';position:absolute;inset-inline:0;bottom:-1px;height:1px;background:var(--grad);opacity:.55}
+.mast-id{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-2);display:flex;align-items:center;gap:7px}
+.mast-id::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--grad);box-shadow:0 0 12px var(--primary)}
+.mast-id b{color:var(--ink);font-weight:800}
+.credits{display:flex;align-items:center;gap:var(--s2)}
+.cred{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px 3px 3px; border-radius:var(--r-full);
+  background:var(--surface); border:1px solid var(--hair);
+  text-decoration:none; color:var(--ink-2); font-size:11px; font-weight:700;
+  transition:border-color var(--fast) var(--ease), background var(--fast) var(--ease);
+  min-height:32px;
+}
+.cred:active{background:var(--surface-2);border-color:var(--hair-2)}
+.cred img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--sunken);display:block}
+.cred span{direction:ltr;unicode-bidi:isolate;white-space:nowrap}
+
+/* ---- scroll region ---- */
+.screen{display:none;flex:1 1 auto;min-height:0;flex-direction:column}
+.screen.on{display:flex;animation:enter var(--base) var(--ease) both}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.pad{padding:var(--s6) var(--s5) var(--s8)}
+@media (max-width:360px){.pad{padding:var(--s5) var(--s4) var(--s7)}}
+.dock{
+  flex:0 0 auto; padding:var(--s3) var(--s5) calc(var(--sab) + var(--s4));
+  background:linear-gradient(to top,var(--paper) 60%,rgba(12,15,32,0));
+  position:relative; z-index:10;
+}
+
+/* ============ TYPE SCALE ============ */
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--primary-ink);margin:0 0 var(--s3)}
+h1.display{font-size:clamp(26px,7.4vw,34px);line-height:1.4;font-weight:800;letter-spacing:-.015em;margin:0 0 var(--s4);
+  background:linear-gradient(120deg,var(--ink) 30%,var(--primary-ink));-webkit-background-clip:text;background-clip:text;color:transparent}
+h2.head{font-size:21px;line-height:1.5;font-weight:800;margin:0 0 var(--s3);letter-spacing:-.01em}
+h3.sub{font-size:15.5px;font-weight:800;margin:0 0 var(--s2)}
+.lede{font-size:15.5px;line-height:1.95;color:var(--ink-2);margin:0}
+.meta{font-size:12.5px;color:var(--ink-3);margin:0;line-height:1.8}
+.center{text-align:center}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:var(--s2);
+  width:100%;min-height:56px;padding:0 var(--s5);
+  border:0;border-radius:var(--r-l);cursor:pointer;
+  font-size:16.5px;font-weight:800;letter-spacing:-.01em;
+  transition:transform var(--fast) var(--ease),box-shadow var(--fast) var(--ease),background var(--fast) var(--ease),opacity var(--fast) var(--ease);
+}
+.btn:active{transform:scale(.985)}
+.btn-1{background:var(--grad);color:#0B0E1C;box-shadow:var(--glow)}
+.btn-1:active{opacity:.92}
+.btn-2{background:var(--surface);color:var(--ink);border:1.5px solid var(--hair-2);box-shadow:var(--e1)}
+.btn-3{background:transparent;color:var(--ink-2);min-height:48px;font-size:14.5px;font-weight:700}
+.btn-3:active{background:var(--surface)}
+.btn .arw{font-size:15px;opacity:.8}
+
+/* ============ CARDS ============ */
+.card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-xl);padding:var(--s5);box-shadow:var(--e2)}
+.card-flat{background:var(--surface-2);border:1px solid var(--hair);border-radius:var(--r-l);padding:var(--s4)}
+
+/* ============ HOME ============ */
+.home-scope{
+  display:flex;align-items:center;gap:var(--s4);
+  margin:var(--s6) 0 0;padding:var(--s4) var(--s5);
+  background:linear-gradient(135deg,var(--primary-soft),rgba(255,255,255,.03));
+  border:1px solid var(--hair-2);border-radius:var(--r-xl);box-shadow:var(--e1);
+}
+.scope-n{font-size:34px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.scope-t{font-size:13.5px;color:var(--ink-2);line-height:1.7}
+.scope-t b{display:block;color:var(--ink);font-size:14.5px;font-weight:800}
+.home-note{display:flex;gap:var(--s3);margin-top:var(--s4);align-items:flex-start}
+.home-note .dot{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--grad);margin-top:11px}
+.home-note p{margin:0;font-size:13.5px;color:var(--ink-2);line-height:1.9}
+
+/* ============ QUIZ HEADER ============ */
+.qbar{flex:0 0 auto;padding:var(--s4) var(--s5) var(--s3);background:rgba(12,15,32,.6);border-bottom:1px solid var(--hair);backdrop-filter:blur(10px)}
+.qbar-top{display:flex;align-items:baseline;justify-content:space-between;gap:var(--s3);margin-bottom:10px}
+.qpos{font-size:13.5px;font-weight:800;color:var(--ink)}
+.qstage{font-size:11.5px;font-weight:700;color:var(--primary-ink);letter-spacing:.01em;background:var(--primary-soft);padding:3px 9px;border-radius:var(--r-full)}
+.track{height:6px;border-radius:var(--r-full);background:var(--sunken);overflow:hidden;border:1px solid var(--hair)}
+.track i{display:block;height:100%;border-radius:var(--r-full);background:var(--grad);transition:width 420ms var(--ease)}
+
+/* ============ QUESTION ============ */
+.qtag{display:inline-block;padding:6px 13px;border-radius:var(--r-full);background:var(--primary-soft);color:var(--primary-ink);border:1px solid rgba(124,92,255,.35);font-size:12px;font-weight:800;margin-bottom:var(--s4)}
+.qstem{font-size:18px;line-height:1.95;font-weight:700;letter-spacing:-.005em;margin:0 0 var(--s5)}
+.qbody{font-size:15.5px;line-height:2.1;color:var(--ink-2)}
+.qbody p{margin:var(--s3) 0}
+.thinkline{display:flex;align-items:center;gap:var(--s3);margin:var(--s6) 0 var(--s2);color:var(--ink-3)}
+.thinkline::before,.thinkline::after{content:'';flex:1;height:1px;background:var(--hair)}
+.thinkline span{font-size:12px;font-weight:700;white-space:nowrap}
+
+/* ---- content structure ---- */
+.part{display:flex;align-items:flex-start;gap:10px;margin:var(--s4) 0;padding:0}
+.part>.letter{
+  flex:0 0 auto;
+  min-width:30px;padding:0 8px;height:29px;border-radius:10px;
+  background:var(--primary-soft);color:var(--primary-ink);border:1px solid rgba(124,92,255,.3);
+  font-size:12.5px;font-weight:800;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-top:6px;
+}
+.part>.part-body{flex:1 1 auto;min-width:0;margin:0;overflow-wrap:anywhere}
+.part-body>p:first-child{margin-top:0}
+.part-body>p:last-child{margin-bottom:0}
+
+/* ---- chemistry / numbers (bidi-safe) ---- */
+.chem,.num,.eq{direction:ltr;unicode-bidi:isolate;font-variant-numeric:tabular-nums;font-weight:700}
+.chem{
+  display:inline-block;vertical-align:middle;
+  background:rgba(255,255,255,.07);border:1px solid var(--hair-2);
+  color:#EAF0FF;border-radius:8px;padding:1px 7px;margin:0 1px;
+  font-size:.95em;white-space:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;
+}
+.chem::-webkit-scrollbar{display:none}
+.num{display:inline-block;color:inherit;white-space:nowrap;margin:0 1px}
+.eq{
+  display:block;margin:var(--s4) 0;padding:var(--s3) var(--s4);
+  background:var(--sunken);border:1px solid var(--hair);border-radius:var(--r-m);
+  border-inline-start:3px solid var(--primary);
+  text-align:center;overflow-x:auto;white-space:nowrap;font-size:15px;color:#EAF0FF;
+}
+.eq .chem{background:transparent;border:0;padding:0}
+sub,sup{font-size:.68em;line-height:0}
+.choices{list-style:none;margin:var(--s4) 0 0;padding:0;display:grid;gap:var(--s2)}
+.choices li,.choice{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-m);padding:12px var(--s4);font-size:15px;line-height:1.8}
+.wordbank{background:var(--warn-soft);border:1px solid rgba(255,194,75,.32);border-radius:var(--r-m);padding:var(--s4);font-size:14.5px;line-height:2.1;margin:var(--s4) 0;color:var(--ink)}
+.wordbank b{color:var(--warn)}
+
+/* ---- figures stay on a light panel so diagrams remain readable ---- */
+.figure-card{background:#FFFFFF;border:1px solid rgba(255,255,255,.14);border-radius:var(--r-l);padding:var(--s4);margin:var(--s5) 0;overflow-x:auto;text-align:center;box-shadow:var(--e2)}
+.figure-card svg{max-width:100%;height:auto;display:block;margin:0 auto}
+.figure-card svg text{fill:#1B2136}
+.figure-caption{font-size:12px;color:#5C6484;margin-top:var(--s3);line-height:1.7}
+.data-table{width:100%;border-collapse:collapse;margin:var(--s4) 0;font-size:14px;overflow:hidden;border-radius:var(--r-m)}
+.data-table th,.data-table td{border:1px solid var(--hair);padding:10px;text-align:center;color:var(--ink)}
+.data-table th{background:var(--surface-2);font-weight:800;font-size:13px;color:var(--primary-ink)}
+.data-table td{background:var(--surface)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* figure internals */
+svg text{font-family:'Vazirmatn',sans-serif}
+text.f{font-size:13px;font-weight:700}
+text.fs{font-size:10.5px}
+text.p{font-size:12px}
+text.ps{font-size:10px}
+text.star{font-size:14px;fill:#7C5CFF}
+.ln,.lnr{stroke:#1B2136;stroke-width:1.6;fill:none}
+.lnr{stroke:#D6455C}
+.dash{stroke:#6B7290;stroke-width:1.4;stroke-dasharray:4 3;fill:none}
+.arr,.arrr,.arrb{stroke:#1B2136;stroke-width:1.6;fill:none}
+.arrr{stroke:#D6455C}.arrb{stroke:#2563C9}
+.dotb{fill:#2563C9}.dotr{fill:#D6455C}
+
+/* ============ ANSWER ============ */
+.reveal{animation:rise 300ms var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.ans{background:var(--success-soft);border:1px solid rgba(61,220,151,.32);border-radius:var(--r-xl);padding:var(--s5);margin-top:var(--s5)}
+.ans-h{display:flex;align-items:center;gap:var(--s2);font-size:13.5px;font-weight:800;color:var(--success);margin-bottom:var(--s3)}
+.ans-h i{width:22px;height:22px;border-radius:50%;background:var(--success);color:#08281B;font-size:12px;font-style:normal;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ans-b{font-size:15.5px;line-height:2.1;color:var(--success-ink)}
+.ans-b ul{margin:0;padding-inline-start:18px}
+.ans-b li{margin:6px 0}
+.ans-b b{color:#FFFFFF}
+.ans-b .chem{background:rgba(255,255,255,.10);border-color:rgba(61,220,151,.35);color:#FFFFFF}
+.ans-b p:first-child{margin-top:0}.ans-b p:last-child{margin-bottom:0}
+
+/* ============ SELF ASSESSMENT ============ */
+.assess{margin-top:var(--s6)}
+.assess-q{font-size:14.5px;font-weight:800;margin:0 0 var(--s2)}
+.assess-h{font-size:12px;color:var(--ink-3);margin:0 0 var(--s4)}
+.opts{display:grid;gap:var(--s2)}
+.opt{
+  display:flex;align-items:center;gap:var(--s3);width:100%;
+  min-height:56px;padding:0 var(--s4);text-align:start;
+  background:var(--surface);border:1.5px solid var(--hair);border-radius:var(--r-l);
+  font-size:15.5px;font-weight:700;cursor:pointer;color:var(--ink);
+  transition:border-color var(--fast) var(--ease),background var(--fast) var(--ease),transform var(--fast) var(--ease);
+}
+.opt:active{transform:scale(.99)}
+.opt i{width:12px;height:12px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 3px rgba(255,255,255,.06)}
+.opt[data-v=strong] i{background:var(--success)}
+.opt[data-v=shaky] i{background:var(--warn)}
+.opt[data-v=weak] i{background:var(--weak)}
+.opt[data-v=strong]:active,.opt.sel[data-v=strong]{border-color:var(--success);background:var(--success-soft)}
+.opt[data-v=shaky]:active,.opt.sel[data-v=shaky]{border-color:var(--warn);background:var(--warn-soft)}
+.opt[data-v=weak]:active,.opt.sel[data-v=weak]{border-color:var(--weak);background:var(--weak-soft)}
+
+/* ============ REVIEW / FINAL ============ */
+.tally{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin:var(--s5) 0}
+.tal{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-l);padding:var(--s4) var(--s2);text-align:center}
+.tal b{display:block;font-size:24px;font-weight:800;line-height:1.2;font-variant-numeric:tabular-nums}
+.tal span{font-size:11.5px;color:var(--ink-3);font-weight:600}
+.tal.g b{color:var(--success)}.tal.y b{color:var(--warn)}.tal.r b{color:var(--weak)}
+.topic{display:flex;align-items:center;gap:var(--s3);padding:14px var(--s4);background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-m);margin-bottom:var(--s2);font-size:14.5px;font-weight:700}
+.topic i{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.topic.r i{background:var(--weak)}.topic.y i{background:var(--warn)}
+.topic em{margin-inline-start:auto;font-style:normal;font-size:11.5px;font-weight:600;color:var(--ink-3)}
+.ring{display:block;margin:var(--s5) auto var(--s3)}
+.ring circle{fill:none;stroke-width:11;stroke-linecap:round}
+.ring .bg{stroke:rgba(255,255,255,.09)}
+.ring .fg{stroke:var(--primary-2);stroke-dasharray:408;stroke-dashoffset:408;transform:rotate(-90deg);transform-origin:50% 50%;transition:stroke-dashoffset 1100ms var(--ease);filter:drop-shadow(0 0 8px rgba(34,211,238,.5))}
+.ring-n{font-size:36px;font-weight:800;fill:var(--ink);font-variant-numeric:tabular-nums}
+.ring-l{font-size:11px;fill:var(--ink-3);font-weight:600}
+.chk{display:flex;gap:var(--s3);align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--hair);font-size:14.5px;line-height:1.8;color:var(--ink-2)}
+.chk:last-child{border-bottom:0}
+.chk i{flex:0 0 auto;width:21px;height:21px;border-radius:7px;background:var(--primary-soft);color:var(--primary-ink);font-size:11px;font-style:normal;font-weight:800;display:inline-flex;align-items:center;justify-content:center;margin-top:4px}
+.pop-icon{width:56px;height:56px;border-radius:var(--r-l);background:var(--grad);color:#0B0E1C;font-size:26px;display:flex;align-items:center;justify-content:center;margin:0 auto var(--s4);box-shadow:var(--glow)}
+
+/* ============ DEVELOPER MODAL ============ */
+.veil{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;background:rgba(6,8,18,.72);backdrop-filter:blur(6px);padding:var(--s4)}
+.veil.on{display:flex;animation:fade 200ms var(--ease) both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@media (min-height:620px){.veil{align-items:center}}
+.modal{
+  width:100%;max-width:400px;background:var(--surface);
+  border:1px solid var(--hair-2);
+  border-radius:var(--r-xl);padding:var(--s6) var(--s5) calc(var(--s5) + var(--sab));
+  box-shadow:var(--e3);animation:pop 300ms var(--ease) both;
+}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+.modal h2{font-size:18px;font-weight:800;margin:0 0 var(--s2);text-align:center;line-height:1.6}
+.modal .modal-sub{font-size:12.5px;color:var(--ink-3);text-align:center;margin:0 0 var(--s5)}
+.maker{display:flex;align-items:center;gap:var(--s3);padding:12px var(--s3);border-radius:var(--r-l);background:var(--surface-2);border:1px solid var(--hair)}
+.maker+.maker{margin-top:var(--s2)}
+.maker img{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:0 0 auto;background:var(--sunken);border:1px solid var(--hair-2)}
+.maker-t{flex:1;min-width:0}
+.maker-r{font-size:11.5px;color:var(--primary-ink);font-weight:700;margin:0 0 1px;display:block}
+.maker-h{font-size:15px;font-weight:800;color:var(--ink);text-decoration:none;direction:ltr;unicode-bidi:isolate;display:block;text-align:start}
+.maker-go{flex:0 0 auto;font-size:18px;color:var(--ink-3);padding:8px;margin:-8px}
+.modal .btn{margin-top:var(--s5)}
+
+/* ===== v2 components: TF choices, view tabs, answer sheet ===== */
+.tf-part .part-body{width:100%}
+.tf-choices{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tf-btn{flex:1 1 120px;min-height:46px;padding:0 10px;border-radius:var(--r-m);border:1.5px solid var(--hair-2);background:var(--surface);font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer;transition:all var(--fast) var(--ease);color:var(--ink-2)}
+.tf-btn:active{transform:scale(.97)}
+.tf-btn.tf-sel{border-color:var(--primary);background:var(--primary-soft);color:var(--primary-ink);box-shadow:0 0 0 3px var(--primary-soft)}
+.tf-btn.tf-correct{border-color:var(--success)!important;background:var(--success-soft)!important;color:var(--success-ink)!important}
+.tf-btn.tf-wrong{border-color:var(--weak)!important;background:var(--weak-soft)!important;color:var(--weak-ink)!important}
+.tf-btn[disabled]{cursor:default;opacity:.95}
+
+.viewtabs{flex:0 0 auto;display:flex;gap:8px;padding:10px var(--s4);background:rgba(12,15,32,.75);backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+.vtab{flex:1;min-height:44px;border-radius:var(--r-full);border:1px solid var(--hair-2);background:var(--surface);font-family:inherit;font-size:12.5px;font-weight:800;color:var(--ink-2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all var(--fast) var(--ease)}
+.vtab:active{transform:scale(.98)}
+.vtab.on{background:var(--grad);border-color:transparent;color:#0B0E1C;box-shadow:var(--glow)}
+
+.sheet-head{background:var(--grad);border-radius:var(--r-l);padding:var(--s5);margin-bottom:var(--s5);text-align:center;box-shadow:var(--glow);color:#0B0E1C}
+.sheet-head h2{margin:0 0 6px;font-size:19px;font-weight:800}
+.sheet-head p{margin:0;font-size:12.5px;opacity:.85;font-weight:700}
+.sheet-card{background:var(--surface);border:1px solid var(--hair);border-radius:var(--r-l);padding:var(--s4) var(--s4) var(--s5);margin-bottom:var(--s4);box-shadow:var(--e2);border-inline-start:4px solid var(--primary)}
+.sheet-card-h{display:flex;align-items:center;gap:10px;margin-bottom:var(--s3);flex-wrap:wrap}
+.sheet-num{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--primary-soft);border:1px solid var(--hair-2);color:var(--primary-ink);font-size:12.5px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.sheet-topic{flex:1 1 auto;min-width:0;font-size:11.5px;font-weight:700;color:var(--ink-3)}
+.sheet-mark{flex:0 0 auto;font-size:11px;font-weight:800;color:var(--primary-ink);background:var(--primary-soft);border:1px solid var(--hair-2);padding:3px 10px;border-radius:var(--r-full)}
+.sheet-stem{font-size:15px;line-height:2;font-weight:700;margin:0 0 8px;color:var(--ink)}
+.sheet-body{font-size:14.5px;line-height:2;color:var(--ink-2)}
+.sheet-reveal-btn{width:100%;min-height:46px;border-radius:var(--r-m);border:1.5px dashed var(--hair-2);background:var(--surface-2);color:var(--primary-ink);font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer;margin-top:var(--s3);transition:all var(--fast) var(--ease)}
+.sheet-reveal-btn:active{transform:scale(.99)}
+.sheet-reveal-btn[disabled]{opacity:.9;cursor:default;border-style:solid;border-color:rgba(61,220,151,.4);color:var(--success-ink);background:var(--success-soft)}
+.sheet-ans{display:none;margin-top:var(--s3);background:var(--success-soft);border:1px solid rgba(61,220,151,.35);border-radius:var(--r-m);padding:var(--s4);font-size:14px;line-height:2;color:var(--ink)}
+.sheet-ans.on{display:block;animation:rise 260ms var(--ease) both}
+.sheet-ans .chem{background:rgba(255,255,255,.08);border-color:rgba(61,220,151,.35)}
+.sheet-list{padding-bottom:var(--s8)}
+
+/* exam B accent */
+:root{--primary:#FF7A59;--primary-2:#FFC24B;--primary-ink:#FFC9B4;--primary-soft:rgba(255,122,89,.18);--focus:#FFC24B;--glow:0 8px 26px rgba(255,122,89,.35)}
+.qtag{border-color:rgba(255,122,89,.35)}
+.part>.letter{border-color:rgba(255,122,89,.32)}
+.ring .fg{filter:drop-shadow(0 0 8px rgba(255,194,75,.5))}
+/* a-answer-format: structured answer key */
+.arow{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed rgba(255,255,255,.10)}
+.arow:last-of-type{border-bottom:0}
+.akey{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:rgba(61,220,151,.16);border:1px solid rgba(61,220,151,.42);color:var(--success-ink,#B7F4DA)}
+.arow-solo{padding-top:2px}
+.abody{flex:1 1 auto;min-width:0}
+.aval{margin:0;font-size:14.5px;line-height:1.95;font-weight:800;color:var(--ink)}
+.awhy{margin:6px 0 0;font-size:13.5px;line-height:2;font-weight:600;color:var(--ink-2)}
+.asteps{margin:8px 0 0;padding:8px 10px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12)}
+.astep{direction:ltr;unicode-bidi:isolate;text-align:left;margin:0;padding:3px 0;font-size:13.5px;font-weight:700;line-height:2;color:var(--ink);white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+.astep+.astep{border-top:1px dashed rgba(255,255,255,.10)}
+.agrade{margin:12px 0 0;padding:8px 12px;border-radius:999px;display:inline-block;font-size:12px;font-weight:800;color:var(--warn-ink,#FFE3A8);background:rgba(255,194,75,.14);border:1px solid rgba(255,194,75,.35)}
+.sheet-ans .akey{background:rgba(255,255,255,.10)}
+@media (max-width:360px){.aval{font-size:14px}.awhy{font-size:13px}.astep{font-size:12.5px}}
+
+/* home-link: back to version chooser */
+.home-link{position:fixed;top:calc(env(safe-area-inset-top) + 10px);inset-inline-start:10px;z-index:120;
+  width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:17px;color:var(--ink-2);background:rgba(22,27,51,.82);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--hair-2);box-shadow:var(--e2);transition:transform .2s var(--ease),color .2s var(--ease)}
+.home-link:active{transform:scale(.92)}
+@media(hover:hover){.home-link:hover{color:var(--ink)}}
+</style>
+</head>
+<body>
+<a class="home-link" href="./" title="بازگشت به انتخاب نسخه" aria-label="بازگشت به انتخاب نسخه">⌂</a>
+
+<div id="app">
+
+  <header class="mast">
+    <div class="mast-id">آزمون <b>B</b></div>
+    <div class="credits">
+      <a class="cred" href="https://t.me/forkcode" target="_blank" rel="noopener" aria-label="کانال توسعه‌دهنده برنامه">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDj30HULdMtCEYru255xWPIZ4pX80FW+6c9ua25viHqMhCERny08tP3YyB6Z9KydP127vL7ZqF/LBbnOWCK+PQYNefTdS3vIgtzavHDYiMy7wvzYQ8ZxXJwymTVLVsEnz0PP+8K108m71Jbe4uY44XYgyuuFA7E4GaydSW20zWoFS5W4iR45DKFKDGQTwTXTT0EfVk8l1JI5NiC5diW8wc02JrlW/eWLBfUHNYdj8R9Av1eWzke4jDlS0QDAHrjrWgnjDSj8xhvFxznyT/SvSVaUVaKOXkTfvnQwLBIq7JBuPVWBBH51o28LKMqMgdxzXJQeLtGkI8u5uxnttaqfjD4iWvh3w3c6lZGW7lhZAIHUxq25gDltp6Zz+FYuvU2auaqjBu6dj0uKJSqsSd+Rwe9eD6xDv1fUCFzi4kB/wC+jWPB+0beyzR50EIAf4b0jP8A45WLe/EG8Sa6u10WF0eRnP8ApJ3cnPTb71VGtyN8+hUqDktDq47LcM4xUhtSnY/lXCWvxVZ7ny5dGjiPTJuT/wDE16zcoIY2c9AOuK6lWUtjJ0uXc5mSMcgioHj44FaexJFLgkjNNWIDt+da3MGmZXkse1O+zla3ol+U4iUgd8VTul9QBRzt6B7OyueR+LdXsL7xPeT6dZw2Vo74ihjG1UUfXqfU96pTvG8zBZYywx91hjpWR4qhWG5EEcglxI37wKMOOOhHOKzYk8pRsTc3cj+GvFpQU4Kdzvv3N2SVcO7SoAOOXAzWPNIJXYKy4x2INR2d0/nOqbQcEMGUHcPx/nWnpkcM95DFf2+nOm4eY5TygB6BgOT69q1jTXcLnf8Awm09B4fuCkRuUe4J3PFtZcKBjB/xrvLbTpCw/wBGRR/tDn9Kh8KajFodhJZ22nT3Kkh1aIphcjplmB7fSt0eJ7nJMOj3ikgfxxAf+h1U6nI+WwlR5/euMtNNlO0rEoXttiP88Vi/Fmzkj+Hmo71kHzQ9UwD+8WtiXxJq5bMWj3BOBy00fHr/ABfSub8XTeKfEPh+701tNJSV1KAyIowGB/v8His/at9DRUUnueM6LpUt5dpBGjGRmChcckntXrGqfCnxHoOhyam3lNHFxNGjBjHnHUfkOOlUNA8O63peoWt62mOLiB1fKyRndg56bq9S8Y/Etk8OXNpPYy2s12rIVkdW44JbCk9T6ntWMp6PmOiMdVynzteLDLKshhjS7Lqpxk5x1OOlfQGpTs1nIIAC2OlfP+vzieKGa2CRATAMqsdxPHP09q9vQssYBJJX+ddmCXMmzmxbs0Z5uFs/3k4wzAKVHY+tX43WVFcMCGGRWNq7tLbt8vGf4utLpUkrRLydg7Yr0FucLWlzprOdY1ZSASaq3cBkbOcVVWUoc02a7ldcZpcjvdC9orWZ4dNZrea3aR28FysG7940zB8KOSeOmf616RpsVj9mEC2luIxyUCAA++K89vHMF3E2m3jmRSfknQIrj0xn/Ctay1LVoiDdWMR/i3RzBfl+hrz6Mo0Y8kmdNJOpC6Rn+OtCex1FRo9gkkNygJCZ3KQfugemO3+FOs/COoy2sUh8qEsOUkY5UfgK7m3iu9QMYfTZZWLK4QPG2GHI/i7VoPa6nEhzpU4YAnb50Wfy3VtGNOV3cck42TNL4eaQ0GnyW5mknMRVSzHpweB6D2rto9OC9VrnPhRBfQW+qvrEYgea5DQxlw2ECAdvevQQIyPvLXmV8TBTaTPSo4aTgnYyFtFXsPyp4hUdhUfiTV7HQ9Lub69lCxQxtIVUjc2OyjPJrnPBXjfTfFsVy9gs8UluR5kUygEA5wQQSCODWDxK5XPojZYb3lHqzqPs6t2rxz4vaXqk3ie3axaP7MLVVZXfHJZs8fTFezwXEZHWsrVba2ubwyvErsEC5I+v+Na4WtTr1OW5liqM6EOax4JZeEdbkmVolt2jLglDOATj2xXtESl1JaIxjJwDycVZjto4s+WijPPApk1ytsDlsEdga9iEY09UeTOUqmjK0tvE+Ay7seoqs8MaMT5gRVHK9hQddJ82RlVowNqYXv61zV5dFt4EhIJzgmr5xexvudNYwHUHmEIAjj/jbjNcv4j8QWmlxM0jdyEA6uR6e3vWXrXim30+zkt0uv3/ACn7sZKMR94joe1cBr7yTXKyzTtINu3dIQSB26VhVxLjotzWnhovVomvLrw8zS29lDqLXYkAiuJH+X3LAjPp0xXXXNhHNbNtkXeyYEkWBkZ4HocetV9Kt9IbU0tot5vbiRUXexkUYOcg49vbpXXy+FJdLSKTzUe1llVS4/5Zjnse3U1jm0HRqRsr+hrlLjVhJ7a9TT8LTWi6Y/2WVHvAQk4HDRnHA/LnP+FRXl3IsuY8bwcjd39q4vUrb+xVl1W0uI4bqFmE+6T5ZosnAK++OOntV3RPEema3bbxKbSZRl4364zjK56itsPVUqajaxjiKDjVdRu51uuWuoobFrGYRo8bttUgAZc4H5Vk30us2NpLczzzNHGpdvL+Y4HtV25uLpobVYjGIUi2xhvvYyeT9Tk1zPjTWNT0/QZmCRnzf3W7qRu44FePXw6VVppM9ahiW6SkpNHB+L7m516/S4nlchV2JG7g7B/jmtjwDdSaa1xaWjNGZhvklyFwQOM57f41laTCbeyXzdouG5JY8jNbnhu6voNRk/s9YftUqbD5o4wOa6qtGDpOCjp+Bz0q01VVRy179TqGudTdB5Oo/N7yIf8A2ar1rNdJBie4lMgfcCxHoPQkVefUrUBEurWNmI5JVWGa5vX/ABBpGnXiojwQb1DbVTGTk+grDAwjGpflSOjGTlKGsmzbl1C4II86Z8/3TxVS5d3XatywGMZIyf51zZ8TadNIQl6jP6KDk/hinPqaCPdFFcSk9ESElj+ley7M8y9jUwAArXEp7DC1zXifVvsZNtp6sbk/elY5Ce31/lUWp+I7y3u0jitLlGCkFJIzkk9Dx6VnG1ubq3ANrc7lIblDyfesKtVpWiXGN9WZlhBHLcoLmZR1JPX5uvNVriV552QcoCec8EZzWtB4dnMpe8jmERbISP7x+p7Cph4cnd2WECGPsXIJP1rjszW2h6pF4WuNNvYrq4W3VkfdhHBxx3zjnntWl4z1UWXhNpgVLJKnGD3JH9a6PxSqfZpvtl5p0d0kRlS3tzueUg4644xzx1riNZMd1b6fbXBGya9gUKTjd84OP0r2M2mqteNn0/U8jJG4YebfR/ojn7zw2t/pU1tkR6reQi/kWRyPLIbgNnpznge1Z3hLQ5dDuby21IGO+nIEX7oyCSMdQhAOW56cY4rofFlxqFv4ug17TopL/TvsoiuVGBlAxPGcZ6gj8a6vT9WS9sluNMm822bksnVfUMOxBrnhRpVLxjLqdU8TXpcs5Q3XXQrnSr6HxBpE0TRNBG8TOGbk/MDwO9fQWlQQgvLJtkDjChgCB+GK8N0+WSO+tVeQTKZk2ljkjmvYvDyy3FnKNwZRJ8o3cj/61RiYRjO66mmCnOVJqWyLOv6Dp+uWbwtDClwuRHOsY3If8Pavn34w2lt4Xm0Vb5oraVRLhtxAk+7noDkV9LwosOEB3N1Zq+df2wIRcf8ACM7MZAuQT/37rmlsdCvfQ8t/t60dRt1S3CjnBLH/ANlrK1PXLEXK+cVuTswHRdwA9Oea5Vo5Yo8sBnIUilKZjeWVeR+vpUwtB3RUk5qzOjt9d09ZSYopA7clvLH+NdHo81xeW7XENszQhtpc7c5/3c5NeY24bzRgH1JruPChma4tog5EUj9f7p5/wrV1pXSRj7JWbO5sJmkkdJbcrDwDvP5nFS6hbRWwWRfniPIYDpWJdakbO6IJkYqCG3jGKZdXrahEuLmNUx9wNwfyNdkuW3mZQ5l6FmW4h3fKSw9yP6VWmmDL8vGO+KrpbvxtI/KkOBGWZgFAySWArmevQ3RBpN8brxDbBS2DL8+WyM4Oaf8AEmaWSawWF3VLY+eWQ42nsc9qv+EvD11cTS3Ok2b6jdafmVlhbA5yqnnk/QYNWNP/ALTFjqi63IzqsfMUyAGMjocEdc9jXFTvF3b1MsNQ+r03B63Mrwr42wskety/KQxSXucfwkDv6H/9dchquuXK6vcalo91c2bMcqUkIYgcfNzz9Oa9V0/w5Pp0zxaxbWkjOEeNvJjK4IzwdvuKdd2Fus2FsbEpntbR8/8AjtbU1GL54nTUqSnHklsedeFPE+rat4u0IaxeyS2kV0jskQVNxB3DOMZ5A619Q6X4lR8yWInQqQd20Beex55+leSQCztpEeGwso51O5WW3jBUjuOK6Sxm1RrRJUeVYGdgpCDBIwTgY9xmtZTi077mMeaNktjsNV+LumaHcvZ6nbX73QVWdrdFK8jOBls15V8V/HOmePJdKGnW95EtmJQxuEVdxbbjGCf7prC8dCaXXbiSQmRnCEsR1+UVyqwyAFvujqOtcspt3R3RhFWkQ31usJ3Nzghvr61SltPtGXT5VX7vH61M5Jm3XdwAqnI4/wAa1Vkha0zGNykdR3qFdFrlkZtpp0UahZGAJOSxPNbGmZsLiGXB+V8kA8MDWdbT4lZLexL443twPzNaB81vLWWKOMtyQr/ypxk1NepM4pxdh2tCXVHYCbYD/DySP84rMXRYY7hVF2FkxxGy/rWxCNygYkYfWm/YI2nWV1O9ehLZIrtck3c4krIuQCSO1jgTJCKAXJ5NVbm0S5VknDFDyQrYzVnYq9BUM08UfDZZum1Rk0OdwUT1L4fhrDTZ9OR54DJNvl2jhwOFIb8Dx65r1LWNGsPFWkSHUTEl2DlJNgzIAPuk9fxrzH4V3jajeXN9dwmRDtZRKMhm5GF7Ed817rpGl/a083UQuGzsiXgIPbFcEYt7mvNeOp8+63bzaZcRRkFAQxjBIY7cj/ODXpvhez0+902O61zQYLO7RQkiy2+xXHZwDxz+nSuJ8Y2FzH4uSCBmdo5sR5GNu056fhmusfxndHToNU1TT7c6dncUhRpJWGSOAT179KqDcaaXUVOlKb0VzT1XStLufDcGl6RYo32mbdvhi3+T82XfcenA2jnuB0qSDU7XRI3shbpGYlMKrt3rGvfdjqTnJ55qPW/E9tZrpEPh6e1IvFYqAoYeWoGOO3XvWFdubkySXMgkllOWZcAfpT9m5tNvYXMldJHH6h4Gn1W8uJpr63tbY4VGxuLYHXHGB9a4Txp4OufDiQO8ouIpiy+YikBSOgJyRkjn6V6n4haaRwIpJ0gC7CqrkNkDv1BrgviJqh/siGCQSM+QQ0hy2VG0U33NUtkeb21mLyaR5FjMUfyguO/ersjJFCEj2so4G01naRcP5csUi5VX3Zx1B61o21is0ihcrEWG4j0z0FZNnRGyQlszSNstxgDq1SamjWWnTXUbbriMAhz16ivQ9E8I2l07RxLdBEBOU5/pWhc+BNKubd7a5e6AdRv2yAEdD6fSmoPmTM5VYtNHicfiS4KbTFGjY+8vP6Gruj61dXszqIEkjjHzOG2nP8qt/FHwtYeF9R06DTTdSRTwtJIJX3HIbGAQBjisfRtSELtAUEULHMfH3fauyT0ujji9dS/r2sGzMccSklwSSKy4LkXXIIz35rYvbeC5j23ADL1H/wBauWv7P7Jcj7HMHB7Z5X61mpMto+w/AOioY7S3lQwLEOzYXAxgfXr0rvNX1mPQrJ7pnZ0iB/dDkAfWuf8ADdrcxadHcCJXgXO6TaAOOuMdcdKp+KZPtGj3bPJhHhYZbsD3rjTk2aacp5Xqmq3era1FcwGQ3c8h2bTyXJ4x6f8A1q9QumSPTv8AibpbyQRqskjNxkryT+YJrxrRtCfW7a5jlklhS3XicfdD56Ed8/X862LbThpEQS3uY5vNG+RpMthsleMduK3w8Y16io31MJYmWGhzI4+HXruW5lbMKlwcMEVML2ye+BxzXZeC9Shn02aOFGEcBUB2Jw+c5x7cYqrcSsXwtxbKvf5HFWYLlTGRE8YPQ7N7Z/CvV/syyfvfgcCzFc1+X8TSu7+RNOM8cm5VO11zjBzVvwX4P0fxRI9/4j8uSCCTAgfID8Z5ORgc1iRcnCzwuWP3dpH9a73xHdvLbqyKqN5Sjco6gADFc9bDewtd3OyhifrHSxB/wh3gRZZWh0DTnx91I2cH6Z3dzWD4m8I6RZSSJYWEUcbofLIJOxv7uc9q0bsW0cVvshniLHcJXyA/t6Vd1W7lYpZRiLyIk3y4GTu45z+dc9k9LHXOMoa3MTSdP1COy1A6hPPbyJEkMBj2scAknH0/OqHzfao42uJGiZywDDHvzjqff1rtNRuLafYsN3bRSIxz5hyD+Rrl7q0sIZjLc6iAUydluhbntyAac6DWyOWNWL3ZzvjTw9p2v3ds1/5u6GIomyTHBYmubX4e6GjAkXb+xmP+FbeqFdQvA3l3qwxrsDkbd3J5xWVcW00JzDdXm09BjI/MV7GGoQdJOS1PHxWJqQqtRegHwTpC7CpvRt6D7Qf6ipV8C+H5FLFbvd3Hn/8A1qgjm1QBmiSdwOTj5wPfHUVdt5b9cvMZNjDqz42/hW31el2RisZVfVn/2Q==" alt=""><span>@forkcode</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="viewtabs" id="viewtabs">
+    <button type="button" class="vtab on" data-view="app">نمای اپلیکیشن</button>
+    <button type="button" class="vtab" data-view="sheet">نمای امتحانی</button>
+  </div>
+
+  <!-- ===== HOME ===== -->
+  <section class="screen on" id="s-home">
+    <div class="scroll"><div class="pad">
+      <p class="eyebrow">شیمی دوازدهم — جمع‌بندی نهایی</p>
+      <h1 class="display">آزمون B — سطح سخت</h1>
+      <p class="lede">۱۶ سؤال تشریحی، گزیده و اصلاح‌شده از میان آزمون‌های نهایی رسمی شیمی (۱۳۹۷ تا ۱۴۰۵)، در سطح سخت و با ساختار دقیق برگهٔ پاسخ رسمی.</p>
+
+      <div class="home-scope">
+        <div class="scope-n">۱۶</div>
+        <div class="scope-t"><b>سؤال با پاسخ تشریحی</b>مجموع نمرهٔ این آزمون ۲۰ نمره است</div>
+      </div>
+
+      <div class="home-note"><span class="dot"></span><p>هر سؤال رو اول خودت حل می‌کنی، بعد پاسخ تشریحی رو می‌بینی.</p></div>
+      <div class="home-note"><span class="dot"></span><p>آخر کار، فقط موضوع‌هایی که لنگ زدی دوباره میان جلوی چشمت.</p></div>
+    </div></div>
+    <div class="dock">
+      <button class="btn btn-1" id="btn-start">شروع آزمون</button>
+      <button class="btn btn-3" id="btn-resume" hidden>ادامه از جایی که موندی</button>
+    </div>
+  </section>
+
+  <!-- ===== QUIZ ===== -->
+  <section class="screen" id="s-quiz">
+    <div class="qbar">
+      <div class="qbar-top">
+        <span class="qpos" id="q-pos"></span>
+        <span class="qstage" id="q-stage"></span>
+      </div>
+      <div class="track"><i id="q-track" style="width:0"></i></div>
+    </div>
+    <div class="scroll" id="q-scroll"><div class="pad">
+      <span class="qtag" id="q-topic"></span>
+      <div class="qstem" id="q-stem"></div>
+      <div class="qbody" id="q-body"></div>
+      <div id="q-think"><div class="thinkline"><span>اول خودت حلش کن</span></div></div>
+      <div id="q-after"></div>
+    </div></div>
+    <div class="dock" id="q-dock"></div>
+  </section>
+
+  <!-- ===== REVIEW ===== -->
+  <section class="screen" id="s-review">
+    <div class="scroll"><div class="pad">
+      <div class="pop-icon">◈</div>
+      <h2 class="head center" id="rv-title"></h2>
+      <p class="lede center" id="rv-text"></p>
+      <div class="tally">
+        <div class="tal g"><b id="rv-g">۰</b><span>بلد بودم</span></div>
+        <div class="tal y"><b id="rv-y">۰</b><span>با شک</span></div>
+        <div class="tal r"><b id="rv-r">۰</b><span>بلد نبودم</span></div>
+      </div>
+      <div id="rv-list"></div>
+    </div></div>
+    <div class="dock">
+      <button class="btn btn-1" id="rv-go"></button>
+      <button class="btn btn-3" id="rv-skip">مستقیم برو به جمع‌بندی</button>
+    </div>
+  </section>
+
+  <!-- ===== FINAL ===== -->
+  <section class="screen" id="s-final">
+    <div class="scroll"><div class="pad">
+      <h2 class="head center" id="fn-title">تموم شد.</h2>
+      <svg class="ring" width="150" height="150" viewBox="0 0 150 150" aria-hidden="true">
+        <circle class="bg" cx="75" cy="75" r="65"></circle>
+        <circle class="fg" id="fn-ring" cx="75" cy="75" r="65"></circle>
+        <text class="ring-n" id="fn-num" x="75" y="78" text-anchor="middle" dominant-baseline="middle">۰٪</text>
+        <text class="ring-l" x="75" y="101" text-anchor="middle">آمادگی</text>
+      </svg>
+      <p class="lede center" id="fn-text"></p>
+      <div class="tally">
+        <div class="tal g"><b id="fn-g">۰</b><span>بلد بودم</span></div>
+        <div class="tal y"><b id="fn-y">۰</b><span>با شک</span></div>
+        <div class="tal r"><b id="fn-r">۰</b><span>بلد نبودم</span></div>
+      </div>
+      <div id="fn-focus"></div>
+      <div class="card" style="margin-top:16px">
+        <h3 class="sub">قبل از جلسه</h3>
+        <div id="fn-tips"></div>
+      </div>
+      <p class="meta center" style="margin-top:24px">توسعه‌دهنده: <a href="https://t.me/forkcode" target="_blank" rel="noopener" style="color:var(--ink-2)" dir="ltr">@forkcode</a> — ارتباط مستقیم: <a href="https://t.me/Oxmit" target="_blank" rel="noopener" style="color:var(--ink-2)" dir="ltr">@Oxmit</a></p>
+    </div></div>
+    <div class="dock">
+      <button class="btn btn-2" id="fn-again" hidden></button>
+      <button class="btn btn-3" id="fn-reset">شروع دوباره از اول</button>
+    </div>
+  </section>
+
+  <!-- ===== SHEET (EXAM VIEW) ===== -->
+  <section class="screen" id="s-sheet">
+    <div class="scroll"><div class="pad" id="sheet-list">
+    </div></div>
+  </section>
+</div>
+
+<!-- ===== CREATOR CREDIT (once) ===== -->
+<div class="veil" id="veil" role="dialog" aria-modal="true" aria-labelledby="veil-t">
+  <div class="modal">
+    <h2 id="veil-t">توسعه‌دهنده این برنامه</h2>
+    <p class="modal-sub">طراحی و ساخت این آزمون تعاملی</p>
+    <a class="maker" href="https://t.me/forkcode" target="_blank" rel="noopener" style="text-decoration:none">
+      <img src="data:image/jpeg;base64,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" alt="">
+      <span class="maker-t"><span class="maker-r">توسعه‌دهنده</span><span class="maker-h">@forkcode</span></span>
+      <span class="maker-go">‹</span>
+    </a>
+    <p class="meta center" style="margin-top:14px">ارتباط مستقیم: <a href="https://t.me/Oxmit" target="_blank" rel="noopener" dir="ltr" style="color:var(--primary-ink);font-weight:700">@Oxmit</a></p>
+    <button class="btn btn-1" id="veil-ok">باشه، شروع کنیم</button>
+  </div>
+</div>
+
+<script id="content" type="application/json">[{"id": "q-b-1", "track": "core", "topic": "ساختار و واکنش ترکیبات آلی", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "عبارت مناسب داخل پرانتز را انتخاب کنید.", "body": "<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>در فرایند تبدیل پارازایلن به ترفتالیک‌اسید، پارازایلن نقش (اکسنده / کاهنده) دارد.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>در هوای آلوده شهرها، تشکیل اوزون، (پیش از / پس از) تشکیل آلاینده نیتروژن‌دی‌اکسید صورت می‌گیرد.</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>در سلول سوختی هیدروژن–اکسیژن، بخار آب از اطراف الکترود (آند / کاتد) خارج می‌شود.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ت</span><div class=\"part-body\"><p>در واکنش‌های تعادلی گرماده، برای افزایش تولید فرآورده می‌توان دمای سامانه را (افزایش / کاهش) داد.</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\"><b>کاهنده</b></p><p class=\"awhy\">در تبدیل پارازایلن به ترفتالیک‌اسید، عدد اکسایش کربن‌ها افزایش می‌یابد (اکسیده می‌شود)؛ ماده‌ای که اکسید می‌شود نقش کاهنده دارد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><b>پس از</b></p><p class=\"awhy\">نخست <span class=\"chem\" dir=\"ltr\">NO₂</span> تشکیل می‌شود، سپس با نور خورشید تجزیه شده و اکسیژن اتمی آزاد می‌کند که با <span class=\"chem\" dir=\"ltr\">O₂</span> اوزون می‌سازد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\"><b>کاتد</b></p><p class=\"awhy\">در سلول سوختی هیدروژن–اکسیژن، اکسیژن در کاتد کاهیده می‌شود و آب در همان‌جا تولید می‌شود: <span class=\"chem\" dir=\"ltr\">O₂ + 4H⁺ + 4e⁻ → 2H₂O</span>.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ت</span><div class=\"abody\"><p class=\"aval\"><b>کاهش</b></p><p class=\"awhy\">در واکنش گرماده، کاهش دما تعادل را به سمت رفت (تولید فرآورده) جابه‌جا می‌کند.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> هر مورد <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره — مجموع <span class=\"num\" dir=\"ltr\">۱</span> نمره</p>", "hasFigure": false}, {"id": "q-b-2", "track": "core", "topic": "بررسی درستی گزاره‌ها", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "درستی یا نادرستی عبارت‌های زیر را مشخص کنید و برای عبارت‌های نادرست، شکل صحیح آن‌ها را بنویسید.", "body": "<div class=\"part tf-part\" data-correct=\"true\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>عدد اکسایش اتم کلر در یون کلرات، <span class=\"chem\" dir=\"ltr\">ClO₃⁻</span>، برابر <span class=\"num\" dir=\"ltr\">+۵</span> است.</p><div class=\"tf-choices\"><button type=\"button\" class=\"tf-btn\" data-choice=\"true\">درست</button><button type=\"button\" class=\"tf-btn\" data-choice=\"false\">نادرست</button></div></div></div>\n<div class=\"part tf-part\" data-correct=\"false\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>رنگ سرخ گل ادریسی نشان می‌دهد که در خاک آن <span class=\"chem\" dir=\"ltr\">[H₃O⁺]</span> <span class=\"chem\" dir=\"ltr\">&gt</span>; <span class=\"chem\" dir=\"ltr\">[OH⁻]</span> است.</p><div class=\"tf-choices\"><button type=\"button\" class=\"tf-btn\" data-choice=\"true\">درست</button><button type=\"button\" class=\"tf-btn\" data-choice=\"false\">نادرست</button></div></div></div>\n<div class=\"part tf-part\" data-correct=\"false\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>ثابت یونش محلول <span class=\"num\" dir=\"ltr\">۱</span> مولار یک اسید ضعیف <span class=\"chem\" dir=\"ltr\">HX</span> در دمای معین، ده برابر ثابت یونش محلول <span class=\"num\" dir=\"ltr\">۰/۱</span> مولار همان اسید است.</p><div class=\"tf-choices\"><button type=\"button\" class=\"tf-btn\" data-choice=\"true\">درست</button><button type=\"button\" class=\"tf-btn\" data-choice=\"false\">نادرست</button></div></div></div>\n<div class=\"part tf-part\" data-correct=\"false\"><span class=\"letter\">ت</span><div class=\"part-body\"><p>کوارتز، نمونه‌ای ناخالص از سیلیس است.</p><div class=\"tf-choices\"><button type=\"button\" class=\"tf-btn\" data-choice=\"true\">درست</button><button type=\"button\" class=\"tf-btn\" data-choice=\"false\">نادرست</button></div></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">درست</p><p class=\"awhy\">در <span class=\"chem\" dir=\"ltr\">ClO₃⁻</span> مجموع عددهای اکسایش برابر <span class=\"chem\" dir=\"ltr\">−۱</span> است: <span class=\"chem\" dir=\"ltr\">x + ۳(−۲) = −۱ → x = +۵</span>.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">نادرست — شکل درست: رنگ <b>آبی</b> گل ادریسی نشان‌دهندهٔ <span class=\"chem\" dir=\"ltr\">[H₃O⁺] > [OH⁻]</span> است.</p><p class=\"awhy\">گل ادریسی در خاک اسیدی آبی و در خاک بازی سرخ می‌شود؛ پس رنگ سرخ نشانهٔ خاک بازی است.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\">نادرست — شکل درست: ثابت یونش این دو محلول <b>برابر</b> است.</p><p class=\"awhy\">ثابت یونش <span class=\"chem\" dir=\"ltr\">Ka</span> تنها به دما و نوع اسید بستگی دارد و با تغییر غلظت تغییر نمی‌کند (آنچه با رقیق‌شدن تغییر می‌کند، درجهٔ یونش است).</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ت</span><div class=\"abody\"><p class=\"aval\">نادرست — شکل درست: کوارتز نمونه‌ای <b>خالص</b> از سیلیس است.</p><p class=\"awhy\">ماسه نمونهٔ ناخالص سیلیس است، اما کوارتز شکل بلوری و خالص <span class=\"chem\" dir=\"ltr\">SiO₂</span> به‌شمار می‌رود.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> هر مورد <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره (تشخیص + اصلاح)</p>", "hasFigure": false, "isTF": true}, {"id": "q-b-3", "track": "core", "topic": "عدد اکسایش و پیوند", "minutes": 3, "difficulty": 2, "mark": 1.25, "stem": "سه ترکیب زیر را در نظر بگیرید:", "body": "<p class=\"eq\"><span class=\"chem\" dir=\"ltr\">(۱) *MnO₄⁻  (۲) *CH₃OH  (۳) CH₂=CH₂</span></p>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>عدد اکسایش اتم‌های ستاره‌دار را در ترکیب‌های <span class=\"num\" dir=\"ltr\">(۱)</span> و <span class=\"num\" dir=\"ltr\">(۲)</span> به‌دست آورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>آیا ترکیب <span class=\"num\" dir=\"ltr\">(۲)</span> می‌تواند به‌عنوان یکی از واکنش‌دهنده‌ها، در واکنش زیر برای تولید پلی‌اتیلن‌ترفتالات <span class=\"chem\" dir=\"ltr\">(PET)</span> استفاده شود؟ چرا؟</p><p><span class=\"chem\" dir=\"ltr\">CH₂OH</span>–<span class=\"chem\" dir=\"ltr\">CH₂OH + .......... → PET</span></p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>کدام ترکیب، در فرایند بازیافت شیمیایی <span class=\"chem\" dir=\"ltr\">PET</span>، دوباره تولید می‌شود؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">Mn</span> در <span class=\"chem\" dir=\"ltr\">MnO₄⁻</span> برابر <span class=\"chem\" dir=\"ltr\">+۷</span> و <span class=\"chem\" dir=\"ltr\">C</span> در <span class=\"chem\" dir=\"ltr\">CH₃OH</span> برابر <span class=\"chem\" dir=\"ltr\">−۲</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">MnO₄⁻ : x + ۴(−۲) = −۱ → x = +۷</p><p class=\"astep\" dir=\"ltr\">CH₃OH : x + ۳(+۱) + (−۲) + (+۱) = ۰ → x = −۲</p></div></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">خیر، نمی‌تواند.</p><p class=\"awhy\">برای ساخت <span class=\"chem\" dir=\"ltr\">PET</span> باید یک دی‌اُل (اتیلن‌گلایکول) با یک دی‌اسید (ترفتالیک‌اسید) پلیمر شود؛ متانول تنها یک گروه <span class=\"chem\" dir=\"ltr\">−OH</span> دارد و زنجیر پلیمری را ادامه نمی‌دهد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\">ترکیب <span class=\"num\" dir=\"ltr\">(۲)</span>، یعنی متانول <span class=\"chem\" dir=\"ltr\">CH₃OH</span></p><p class=\"awhy\">در بازیافت شیمیایی <span class=\"chem\" dir=\"ltr\">PET</span> از متانول استفاده می‌شود تا پلیمر به مونومرهای سازندهٔ خود شکسته شود.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره، ب <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)، پ <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-4", "track": "core", "topic": "شعاع یونی و آنتالپی شبکه", "minutes": 3, "difficulty": 2, "mark": 1.25, "stem": "با توجه به جدول شعاع یونی داده‌شده، به پرسش‌ها پاسخ دهید.", "body": "<table class=\"data-table\"><tr><th>یون</th><th dir=\"ltr\">Ca²⁺</th><th dir=\"ltr\">F⁻</th><th dir=\"ltr\">Na⁺</th><th dir=\"ltr\">O²⁻</th><th dir=\"ltr\">K⁺</th><th dir=\"ltr\">Cl⁻</th></tr><tr><td dir=\"ltr\">شعاع یونی (pm)</td><td>۹۹</td><td>۱۳۳</td><td>۱۰۲</td><td>۱۴۰</td><td>۱۳۸/۱</td><td>۱۸۱</td></tr></table>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>چگالی بار کدام یون بیشتر است؛ <span class=\"chem\" dir=\"ltr\">Na⁺</span> یا <span class=\"chem\" dir=\"ltr\">K⁺</span>؟ دلیل بیاورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>نقطه ذوب کدام ترکیب بیشتر است؛ <span class=\"chem\" dir=\"ltr\">CaF₂</span> یا <span class=\"chem\" dir=\"ltr\">CaO</span>؟ دلیل بیاورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>در میان ترکیب‌های <span class=\"chem\" dir=\"ltr\">NaF</span>، <span class=\"chem\" dir=\"ltr\">CaO</span> و <span class=\"chem\" dir=\"ltr\">KCl</span>، کدام‌یک کمترین نقطه ذوب را دارد؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">Na⁺</span></p><p class=\"awhy\">بار هر دو یون <span class=\"chem\" dir=\"ltr\">+۱</span> است، اما شعاع <span class=\"chem\" dir=\"ltr\">Na⁺</span> (<span class=\"chem\" dir=\"ltr\">۱۰۲ pm</span>) کوچک‌تر از <span class=\"chem\" dir=\"ltr\">K⁺</span> (<span class=\"chem\" dir=\"ltr\">۱۳۸/۱ pm</span>) است؛ بار یکسان در حجم کوچک‌تر یعنی چگالی بار بیشتر.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">CaO</span></p><p class=\"awhy\">بار آنیون <span class=\"chem\" dir=\"ltr\">O²⁻</span> برابر <span class=\"chem\" dir=\"ltr\">−۲</span> است در حالی که <span class=\"chem\" dir=\"ltr\">F⁻</span> بار <span class=\"chem\" dir=\"ltr\">−۱</span> دارد؛ بار بیشتر یعنی جاذبهٔ الکتروستاتیکی قوی‌تر، آنتالپی فروپاشی شبکهٔ بزرگ‌تر و نقطهٔ ذوب بالاتر.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">KCl</span></p><p class=\"awhy\">در میان این سه ترکیب، <span class=\"chem\" dir=\"ltr\">KCl</span> هم بار یونی کمتر (<span class=\"chem\" dir=\"ltr\">+۱</span> و <span class=\"chem\" dir=\"ltr\">−۱</span>) و هم بزرگ‌ترین شعاع‌های یونی را دارد؛ پس ضعیف‌ترین شبکه و کمترین نقطهٔ ذوب را دارد.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> هر بخش <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل) — پ <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-5", "track": "core", "topic": "قطبیت مولکولی", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "شکل زیر نقشه پتانسیل الکتروستاتیکی یکی از دو مولکول <span class=\"chem\" dir=\"ltr\">OF₂</span> یا <span class=\"chem\" dir=\"ltr\">H₂O</span> را نشان می‌دهد که در آن توزیع بار به‌روشنی نامتقارن است.", "body": "<figure class=\"figure-card\" role=\"img\" aria-label=\"نقشه پتانسیل الکتروستاتیکی مولکول موردنظر\"><svg viewBox=\"0 0 200 110\">\n<g font-family=\"Vazirmatn, Tahoma, sans-serif\" font-size=\"12\" text-anchor=\"middle\">\n <ellipse cx=\"100\" cy=\"50\" rx=\"70\" ry=\"32\" fill=\"url(#gg)\" stroke=\"#5B4450\"/>\n <text class=\"fx\" x=\"100\" y=\"96\">نقشه پتانسیل الکتروستاتیکی</text>\n</g>\n<defs><linearGradient id=\"gg\" x1=\"0\" x2=\"1\"><stop offset=\"0\" stop-color=\"#8E4FBF\"/><stop offset=\"0.5\" stop-color=\"#fff\"/><stop offset=\"1\" stop-color=\"#7C2855\"/></linearGradient></defs></svg><figcaption class=\"figure-caption\">نقشه پتانسیل الکتروستاتیکی مولکول موردنظر</figcaption></figure>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>این نقشه مربوط به کدام مولکول است؟ دلیل بیاورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>آیا این مولکول در یک میدان الکتریکی جهت‌گیری می‌کند؟ چرا؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">مولکول <span class=\"chem\" dir=\"ltr\">H₂O</span></p><p class=\"awhy\">اختلاف الکترونگاتیوی اکسیژن و هیدروژن زیاد است و هر دو پیوند در یک سو جمع می‌شوند؛ بنابراین نقشهٔ پتانسیل آن به‌شدت نامتقارن است (قطب منفی روی اکسیژن). در <span class=\"chem\" dir=\"ltr\">OF₂</span> اختلاف الکترونگاتیوی اکسیژن و فلوئور کم است و توزیع بار نامتقارنی چنین چشمگیری دیده نمی‌شود.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">بله، جهت‌گیری می‌کند.</p><p class=\"awhy\">مولکول قطبی است؛ در میدان الکتریکی، سر مثبت مولکول به‌سمت قطب منفی و سر منفی آن به‌سمت قطب مثبت می‌چرخد.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)، ب <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)</p>", "hasFigure": true}, {"id": "q-b-6", "track": "core", "topic": "تعادل یونش اسید ضعیف", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "غلظت اولیه یک محلول اسید ضعیف تک‌پروتونی، <span class=\"chem\" dir=\"ltr\">HA</span>، برابر <span class=\"chem\" dir=\"ltr\">۰/۰۱ mol.L⁻¹</span> است. ثابت یونش این اسید در دمای معین برابر <span class=\"num\" dir=\"ltr\">۴/۹×۱۰⁻⁵</span> است. غلظت یون هیدرونیوم را در این محلول حساب کنید.", "body": "", "answer": "<div class=\"arow arow-solo\"><div class=\"abody\"><p class=\"aval\">پاسخ نهایی: <span class=\"chem\" dir=\"ltr\">[H₃O⁺] = ۷×۱۰⁻⁴ mol.L⁻¹</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">HA + H₂O ⇌ H₃O⁺ + A⁻</p><p class=\"astep\" dir=\"ltr\">Ka = [H₃O⁺][A⁻] ÷ [HA] ≈ [H₃O⁺]² ÷ ۰/۰۱</p><p class=\"astep\" dir=\"ltr\">[H₃O⁺]² = ۴/۹×۱۰⁻⁵ × ۱۰⁻² = ۴۹×۱۰⁻⁸</p><p class=\"astep\" dir=\"ltr\">[H₃O⁺] = ۷×۱۰⁻⁴ mol.L⁻¹</p></div><p class=\"awhy\">چون اسید ضعیف است، مقدار یونش نسبت به غلظت اولیه ناچیز است و می‌توان <span class=\"chem\" dir=\"ltr\">[HA]تعادل</span> را برابر <span class=\"chem\" dir=\"ltr\">۰/۰۱</span> گرفت.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> نوشتن رابطهٔ <span class=\"chem\" dir=\"ltr\">Ka</span> <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره، محاسبه <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-7", "track": "core", "topic": "الکتروشیمی - پیل سوختی", "minutes": 5, "difficulty": 3, "mark": 1.75, "stem": "در یک سلول سوختی متانولی، متانول مایع <span class=\"chem\" dir=\"ltr\">(CH₄O)</span> در آند با آب واکنش داده و به کربن‌دی‌اکسید تبدیل می‌شود. پتانسیل کاهش استاندارد نیم‌واکنش کاتد (اکسیژن به آب) برابر <span class=\"num\" dir=\"ltr\">۱/۲۳</span> ولت و پتانسیل کاهش استاندارد نیم‌واکنش آند برابر <span class=\"num\" dir=\"ltr\">۰/۰۱۶</span> ولت است.", "body": "<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>نیم‌واکنش موازنه‌شده رخ‌داده در آند این سلول سوختی را بنویسید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>عدد اکسایش اتم کربن را در متانول و در کربن‌دی‌اکسید به‌دست آورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>اختلاف پتانسیل استاندارد <span class=\"chem\" dir=\"ltr\">(emf)</span> این سلول سوختی را حساب کنید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ت</span><div class=\"part-body\"><p>چرا سلول سوختی هیدروژنی نسبت به این سلول سوختی متانولی، برای محیط‌زیست مطلوب‌تر است؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">CH₄O(l) + H₂O(l) → CO₂(g) + 6H⁺(aq) + 6e⁻</span></p><p class=\"awhy\">در آند اکسایش رخ می‌دهد؛ کربن از <span class=\"chem\" dir=\"ltr\">−۲</span> به <span class=\"chem\" dir=\"ltr\">+۴</span> می‌رود، پس ۶ الکترون آزاد می‌شود.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">C</span> در متانول <span class=\"chem\" dir=\"ltr\">−۲</span> و در <span class=\"chem\" dir=\"ltr\">CO₂</span> برابر <span class=\"chem\" dir=\"ltr\">+۴</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">CH₄O : x + ۴(+۱) + (−۲) = ۰ → x = −۲</p><p class=\"astep\" dir=\"ltr\">CO₂ : x + ۲(−۲) = ۰ → x = +۴</p></div></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">emf = ۱/۲۱۴ V</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">emf = E°(کاتد) − E°(آند)</p><p class=\"astep\" dir=\"ltr\">emf = ۱/۲۳ − ۰/۰۱۶ = ۱/۲۱۴ V</p></div></div></div>\n<div class=\"arow\"><span class=\"akey\">ت</span><div class=\"abody\"><p class=\"aval\">زیرا سلول سوختی هیدروژنی فقط <b>آب</b> تولید می‌کند.</p><p class=\"awhy\">فرآوردهٔ سلول متانولی گاز گلخانه‌ای <span class=\"chem\" dir=\"ltr\">CO₂</span> است، اما در سلول هیدروژنی تنها <span class=\"chem\" dir=\"ltr\">H₂O</span> تولید می‌شود و آلایندهٔ کربنی ندارد.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span>، ب <span class=\"num\" dir=\"ltr\">۰/۵</span>، پ <span class=\"num\" dir=\"ltr\">۰/۵</span>، ت <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-8", "track": "core", "topic": "پتانسیل کاهش استاندارد", "minutes": 3, "difficulty": 2, "mark": 1.25, "stem": "با توجه به جدول پتانسیل‌های کاهش استاندارد داده‌شده، به پرسش‌ها پاسخ دهید.", "body": "<table class=\"data-table\"><tr><th>نیم‌واکنش کاهش</th><th dir=\"ltr\">E° (V)</th></tr><tr><td dir=\"ltr\">Au⁺ + e⁻ → Au</td><td>+۱/۶۸</td></tr><tr><td dir=\"ltr\">O₂ + 4H⁺ + 4e⁻ → 2H₂O</td><td>+۱/۲۳</td></tr><tr><td dir=\"ltr\">Ag⁺ + e⁻ → Ag</td><td>+۰/۸۰</td></tr><tr><td dir=\"ltr\">Cr³⁺ + 3e⁻ → Cr</td><td>−۰/۷۳</td></tr></table>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>کدام فلز، در حضور اکسیژن هوا و رطوبت، اکسید نمی‌شود؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>از میان دو سلول گالوانی قابل‌ساخت با این چهار نیم‌سلول، کدام دو فلز بیشترین اختلاف پتانسیل استاندارد سلول را ایجاد می‌کنند؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>آیا می‌توان محلول کروم<span class=\"chem\" dir=\"ltr\">(III)</span>کلرید را در ظرفی از جنس نقره نگه‌داری کرد؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">طلا، <span class=\"chem\" dir=\"ltr\">Au</span></p><p class=\"awhy\">پتانسیل کاهش <span class=\"chem\" dir=\"ltr\">Au⁺/Au</span> (<span class=\"chem\" dir=\"ltr\">+۱/۶۸ V</span>) از پتانسیل کاهش اکسیژن (<span class=\"chem\" dir=\"ltr\">+۱/۲۳ V</span>) بیشتر است؛ پس اکسیژن نمی‌تواند طلا را اکسید کند.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">طلا و کروم</p><p class=\"awhy\">بیشترین emf از اختلاف بزرگ‌ترین و کوچک‌ترین پتانسیل کاهش به‌دست می‌آید: <span class=\"chem\" dir=\"ltr\">emf = ۱/۶۸ − (−۰/۷۳) = ۲/۴۱ V</span>.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\">بله، می‌توان.</p><p class=\"awhy\">پتانسیل کاهش نقره (<span class=\"chem\" dir=\"ltr\">+۰/۸۰ V</span>) از کروم (<span class=\"chem\" dir=\"ltr\">−۰/۷۳ V</span>) بیشتر است؛ پس نقره کاهندهٔ ضعیف‌تری است، با یون <span class=\"chem\" dir=\"ltr\">Cr³⁺</span> واکنش نمی‌دهد و ظرف سالم می‌ماند.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)، ب <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره، پ <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-9", "track": "core", "topic": "آنتالپی شبکه یونی", "minutes": 3, "difficulty": 2, "mark": 1.25, "stem": "شکل زیر، فرایند فروپاشی یک شبکه بلور یونی را نشان می‌دهد.", "body": "<figure class=\"figure-card\" role=\"img\" aria-label=\"فروپاشی شبکه بلوری یونی به یون‌های گازی\"><svg viewBox=\"0 0 330 110\">\n<g font-family=\"Vazirmatn, Tahoma, sans-serif\" font-size=\"12\">\n <rect x=\"20\" y=\"25\" width=\"70\" height=\"55\" fill=\"#F4EAEC\" stroke=\"#241620\"/>\n <text x=\"55\" y=\"55\" text-anchor=\"middle\" font-size=\"10\">NaCl(s)</text>\n <text class=\"fx\" x=\"55\" y=\"98\" text-anchor=\"middle\" font-size=\"10\">شبکه بلوری یونی</text>\n <line x1=\"100\" y1=\"52\" x2=\"170\" y2=\"52\" stroke=\"#241620\" stroke-width=\"2\" marker-end=\"url(#ar)\"/>\n <text class=\"fx\" x=\"135\" y=\"42\" text-anchor=\"middle\" font-size=\"10\">انرژی</text>\n <circle cx=\"220\" cy=\"45\" r=\"16\" fill=\"#F5E5EE\" stroke=\"#7C2855\"/>\n <text x=\"220\" y=\"49\" text-anchor=\"middle\" font-size=\"10\">Na⁺</text>\n <circle cx=\"270\" cy=\"45\" r=\"18\" fill=\"#F3E3EE\" stroke=\"#8E4FBF\"/>\n <text x=\"270\" y=\"49\" text-anchor=\"middle\" font-size=\"10\">Cl⁻</text>\n <text class=\"fx\" x=\"245\" y=\"90\" text-anchor=\"middle\" font-size=\"10\">یون‌های گازی جدا از هم</text>\n</g>\n<defs><marker id=\"ar\" markerWidth=\"8\" markerHeight=\"8\" refX=\"4\" refY=\"4\" orient=\"auto\"><path d=\"M0,0 L8,4 L0,8 z\" fill=\"#241620\"/></marker></defs></svg><figcaption class=\"figure-caption\">فروپاشی شبکه بلوری یونی به یون‌های گازی</figcaption></figure>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>این شکل مربوط به فروپاشی شبکه یونی کدام ترکیب است؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>انرژی لازم برای انجام این فرایند چه نامیده می‌شود؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>اگر به‌جای یون کلرید <span class=\"chem\" dir=\"ltr\">(Cl⁻)</span>، یون برمید <span class=\"chem\" dir=\"ltr\">(Br⁻)</span> در این شبکه جایگزین شود، انرژی لازم برای فروپاشی شبکه، کمتر می‌شود یا بیشتر؟ دلیل بیاورید.</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">سدیم‌کلرید: <span class=\"chem\" dir=\"ltr\">NaCl(s) → Na⁺(g) + Cl⁻(g)</span></p><p class=\"awhy\">شکل، جدا شدن یون‌های <span class=\"chem\" dir=\"ltr\">Na⁺</span> و <span class=\"chem\" dir=\"ltr\">Cl⁻</span> از شبکهٔ بلور و رفتن آن‌ها به حالت گازی را نشان می‌دهد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><b>آنتالپی فروپاشی شبکه</b> (انرژی شبکه)</p><p class=\"awhy\">انرژی لازم برای جدا کردن کامل یون‌های یک مول بلور یونی و تبدیل آن‌ها به یون‌های گازی.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\"><b>کمتر</b> می‌شود.</p><p class=\"awhy\">شعاع <span class=\"chem\" dir=\"ltr\">Br⁻</span> بزرگ‌تر از <span class=\"chem\" dir=\"ltr\">Cl⁻</span> است؛ فاصلهٔ میان مرکز یون‌ها بیشتر و چگالی بار آنیون کمتر می‌شود، پس جاذبهٔ الکتروستاتیکی و انرژی لازم برای فروپاشی شبکه کاهش می‌یابد.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۲۵</span>، ب <span class=\"num\" dir=\"ltr\">۰/۲۵</span>، پ <span class=\"num\" dir=\"ltr\">۰/۷۵</span> نمره (پاسخ + دلیل)</p>", "hasFigure": true}, {"id": "q-b-10", "track": "core", "topic": "خوردگی و پتانسیل کاهش", "minutes": 5, "difficulty": 3, "mark": 1.75, "stem": "با توجه به جدول پتانسیل‌های کاهش استاندارد داده‌شده، به پرسش‌ها پاسخ دهید.", "body": "<table class=\"data-table\"><tr><th>نیم‌واکنش کاهش</th><th dir=\"ltr\">E° (V)</th></tr><tr><td dir=\"ltr\">O₂ + 4H⁺ + 4e⁻ → 2H₂O</td><td>+۱/۲۳</td></tr><tr><td dir=\"ltr\">O₂ + 2H₂O + 4e⁻ → 4OH⁻</td><td>+۰/۴۰</td></tr><tr><td dir=\"ltr\">Fe²⁺ + 2e⁻ → Fe</td><td>−۰/۴۴</td></tr><tr><td dir=\"ltr\">Au³⁺ + 3e⁻ → Au</td><td>+۱/۵۰</td></tr></table>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>چرا خوردگی آهن در محیط اسیدی، سریع‌تر از محیط خنثی (بدون اسید) رخ می‌دهد؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>آیا طلا در تماس با هوای اسیدی، توسط اکسیژن اکسید می‌شود؟ چرا؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>اختلاف پتانسیل استاندارد سلول گالوانی حاصل از الکترودهای طلا و آهن را حساب کنید.</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">زیرا در محیط اسیدی قدرت اکسندگی اکسیژن بیشتر است.</p><p class=\"awhy\">پتانسیل کاهش اکسیژن در محیط اسیدی <span class=\"chem\" dir=\"ltr\">+۱/۲۳ V</span> است، در حالی که در محیط خنثی <span class=\"chem\" dir=\"ltr\">+۰/۴۰ V</span> است؛ اختلاف پتانسیل بزرگ‌تر با آهن یعنی تمایل بیشتر به خوردگی و سرعت بالاتر آن.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">خیر، اکسید نمی‌شود.</p><p class=\"awhy\">پتانسیل کاهش <span class=\"chem\" dir=\"ltr\">Au³⁺/Au</span> برابر <span class=\"chem\" dir=\"ltr\">+۱/۵۰ V</span> و بیشتر از <span class=\"chem\" dir=\"ltr\">+۱/۲۳ V</span> اکسیژن در محیط اسیدی است؛ پس واکنش اکسایش طلا به‌خودی‌خود انجام نمی‌شود.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">emf = +۱/۹۴ V</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">emf = E°(کاتد) − E°(آند)</p><p class=\"astep\" dir=\"ltr\">emf = (+۱/۵۰) − (−۰/۴۴) = +۱/۹۴ V</p></div><p class=\"awhy\">طلا کاتد (پتانسیل بیشتر) و آهن آند است.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۷۵</span>، ب <span class=\"num\" dir=\"ltr\">۰/۵</span>، پ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-11", "track": "core", "topic": "قدرت اسیدها و Ka", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "ثابت یونش، <span class=\"chem\" dir=\"ltr\">Ka</span>، محلول <span class=\"num\" dir=\"ltr\">۰/۱</span> مولار نیتروزاسید <span class=\"chem\" dir=\"ltr\">(HNO₂)</span> برابر <span class=\"num\" dir=\"ltr\">۴/۵×۱۰⁻⁴</span> و ثابت یونش محلول <span class=\"num\" dir=\"ltr\">۰/۱</span> مولار استیک‌اسید <span class=\"chem\" dir=\"ltr\">(CH₃COOH)</span> برابر <span class=\"num\" dir=\"ltr\">۱/۸×۱۰⁻⁵</span> است.", "body": "<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>کدام اسید، قوی‌تر است؟ دلیل بیاورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>اگر محلول استیک‌اسید ده برابر رقیق شود، مقدار <span class=\"chem\" dir=\"ltr\">Ka</span> آن چه تغییری می‌کند؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">نیتروزاسید، <span class=\"chem\" dir=\"ltr\">HNO₂</span></p><p class=\"awhy\">ثابت یونش آن (<span class=\"chem\" dir=\"ltr\">۴/۵×۱۰⁻⁴</span>) حدود ۲۵ برابر استیک‌اسید (<span class=\"chem\" dir=\"ltr\">۱/۸×۱۰⁻⁵</span>) است؛ ثابت یونش بزرگ‌تر یعنی یونش بیشتر و اسید قوی‌تر.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><b>تغییری نمی‌کند</b> و برابر <span class=\"chem\" dir=\"ltr\">۱/۸×۱۰⁻⁵</span> می‌ماند.</p><p class=\"awhy\">ثابت یونش تنها به دما بستگی دارد؛ با رقیق‌کردن، درجهٔ یونش بیشتر می‌شود اما <span class=\"chem\" dir=\"ltr\">Ka</span> ثابت می‌ماند.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)، ب <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-12", "track": "core", "topic": "واکنش صابونی‌شدن", "minutes": 5, "difficulty": 3, "mark": 2, "stem": "برای باز کردن لوله‌های مسدود شده با چربی، از محلول غلیظ سدیم‌هیدروکسید استفاده می‌شود که طی واکنش صابونی‌شدن با اسیدهای چرب موجود در چربی، پاک‌کننده صابونی تولید می‌کند:", "body": "<p><span class=\"chem\" dir=\"ltr\">RCOOH(s) + NaOH(aq) → RCOONa(aq) + H₂O(l)</span></p>\n<p>اگر از <span class=\"num\" dir=\"ltr\">۲</span> لیتر محلول سدیم‌هیدروکسید، <span class=\"num\" dir=\"ltr\">۰/۵</span> مول پاک‌کننده صابونی <span class=\"chem\" dir=\"ltr\">(RCOONa)</span> تولید شود، <span class=\"chem\" dir=\"ltr\">pH</span> محلول اولیه سدیم‌هیدروکسید را حساب کنید.</p>", "answer": "<div class=\"arow arow-solo\"><div class=\"abody\"><p class=\"aval\">پاسخ نهایی: <span class=\"chem\" dir=\"ltr\">pH = ۱۳/۴</span></p><div class=\"asteps\"><p class=\"astep\" dir=\"ltr\">n(NaOH) = n(RCOONa) = ۰/۵ mol</p><p class=\"astep\" dir=\"ltr\">[NaOH] = ۰/۵ mol ÷ ۲ L = ۰/۲۵ mol.L⁻¹</p><p class=\"astep\" dir=\"ltr\">NaOH باز قوی است → [OH⁻] = ۰/۲۵ mol.L⁻¹</p><p class=\"astep\" dir=\"ltr\">pOH = −log(۰/۲۵) = ۰/۶ → pH = ۱۴ − ۰/۶ = ۱۳/۴</p></div><p class=\"awhy\">نسبت مولی <span class=\"chem\" dir=\"ltr\">NaOH</span> به <span class=\"chem\" dir=\"ltr\">RCOONa</span> در معادله ۱ به ۱ است؛ پس شمار مول باز مصرف‌شده برابر شمار مول صابون تولیدشده است. (<span class=\"chem\" dir=\"ltr\">log۴ = ۰/۶</span>)</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> محاسبهٔ مول و غلظت <span class=\"num\" dir=\"ltr\">۱</span> نمره، محاسبهٔ <span class=\"chem\" dir=\"ltr\">pH</span> <span class=\"num\" dir=\"ltr\">۱</span> نمره</p>", "hasFigure": false}, {"id": "q-b-13", "track": "core", "topic": "آنتالپی پیوند", "minutes": 2, "difficulty": 1, "mark": 0.75, "stem": "با توجه به جدول آنتالپی پیوند داده‌شده به پرسش‌ها پاسخ دهید.", "body": "<table class=\"data-table\"><tr><th>پیوند</th><th dir=\"ltr\">Si–Si</th><th dir=\"ltr\">C–C</th><th dir=\"ltr\">Si–C</th><th dir=\"ltr\">Si–O</th></tr><tr><td dir=\"ltr\">آنتالپی پیوند (kJ/mol)</td><td>۲۲۶</td><td>۳۴۷</td><td>۳۰۱</td><td dir=\"ltr\">X</td></tr></table>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>با توجه به اینکه سیلیسیم در طبیعت عمدتاً به‌شکل سیلیس <span class=\"chem\" dir=\"ltr\">(SiO₂)</span> یافت می‌شود، مقدار <span class=\"chem\" dir=\"ltr\">X</span> (آنتالپی پیوند <span class=\"chem\" dir=\"ltr\">Si</span>–<span class=\"chem\" dir=\"ltr\">O</span>) نسبت به آنتالپی پیوند <span class=\"chem\" dir=\"ltr\">Si</span>–<span class=\"chem\" dir=\"ltr\">Si</span> چه رابطه‌ای دارد؟ (بزرگ‌تر یا کوچک‌تر)</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>کدام‌یک سخت‌تر است؛ کربورسیلیسیم <span class=\"chem\" dir=\"ltr\">(SiC)</span> یا سیلیسیم خالص <span class=\"chem\" dir=\"ltr\">(Si)</span>؟ دلیل بیاورید.</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\"><b>بزرگ‌تر</b> از آنتالپی پیوند <span class=\"chem\" dir=\"ltr\">Si–Si</span></p><p class=\"awhy\">اگر پیوند <span class=\"chem\" dir=\"ltr\">Si–O</span> ضعیف‌تر بود، سیلیسیم در طبیعت به‌شکل عنصری پایدار می‌ماند؛ فراوانی سیلیس نشان می‌دهد پیوند <span class=\"chem\" dir=\"ltr\">Si–O</span> قوی‌تر و پایدارتر است (در واقع <span class=\"chem\" dir=\"ltr\">X ≈ ۳۶۸ kJ/mol</span>).</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">کربورسیلیسیم، <span class=\"chem\" dir=\"ltr\">SiC</span></p><p class=\"awhy\">هر دو جامد کووالانسی‌اند، اما آنتالپی پیوند <span class=\"chem\" dir=\"ltr\">Si–C</span> (<span class=\"chem\" dir=\"ltr\">۳۰۱ kJ/mol</span>) بیشتر از <span class=\"chem\" dir=\"ltr\">Si–Si</span> (<span class=\"chem\" dir=\"ltr\">۲۲۶ kJ/mol</span>) است؛ شکستن پیوندهای قوی‌تر دشوارتر است، پس <span class=\"chem\" dir=\"ltr\">SiC</span> سخت‌تر است.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره، ب <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)</p>", "hasFigure": false}, {"id": "q-b-14", "track": "core", "topic": "عوامل مؤثر بر سرعت واکنش", "minutes": 2, "difficulty": 1, "mark": 1, "stem": "واکنش <span class=\"chem\" dir=\"ltr\">H₂(g) +</span> ½<span class=\"chem\" dir=\"ltr\">O₂(g) → H₂O(g)</span> در چهار شرایط زیر بررسی شده است:", "body": "<p><span class=\"num\" dir=\"ltr\">(۱)</span> بدون کاتالیزگر، در دمای بالا</p>\n<p><span class=\"num\" dir=\"ltr\">(۲)</span> در حضور کاتالیزگر پلاتین <span class=\"chem\" dir=\"ltr\">(Pt)</span>، در دمای اتاق</p>\n<p><span class=\"num\" dir=\"ltr\">(۳)</span> در حضور کاتالیزگر روی <span class=\"chem\" dir=\"ltr\">(Zn)</span>، در دمای اتاق</p>\n<p><span class=\"num\" dir=\"ltr\">(۴)</span> با جرقه، بدون کاتالیزگر</p>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>در کدام حالت، انرژی فعال‌سازی نسبت به حالت <span class=\"num\" dir=\"ltr\">(۱)</span> تغییری نمی‌کند؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>آیا گرمای آزادشده در دو واکنش <span class=\"num\" dir=\"ltr\">(۲)</span> و <span class=\"num\" dir=\"ltr\">(۳)</span> با هم برابر است؟ چرا؟</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>آیا انرژی فعال‌سازی واکنش در حضور <span class=\"chem\" dir=\"ltr\">Zn</span> و <span class=\"chem\" dir=\"ltr\">Pt</span> با هم برابر است؟ چرا؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">حالت <span class=\"num\" dir=\"ltr\">(۴)</span></p><p class=\"awhy\">جرقه فقط انرژی لازم برای شروع واکنش را فراهم می‌کند؛ چون کاتالیزگری در کار نیست، مسیر واکنش و انرژی فعال‌سازی مانند حالت <span class=\"num\" dir=\"ltr\">(۱)</span> باقی می‌ماند.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">بله، برابر است.</p><p class=\"awhy\">گرمای آزادشده به <span class=\"chem\" dir=\"ltr\">ΔH</span> واکنش بستگی دارد و <span class=\"chem\" dir=\"ltr\">ΔH</span> با تغییر کاتالیزگر عوض نمی‌شود؛ کاتالیزگر تنها سرعت را تغییر می‌دهد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\">خیر، برابر نیست.</p><p class=\"awhy\">هر کاتالیزگر مسیر تازه‌ای با انرژی فعال‌سازی ویژهٔ خود می‌سازد؛ بنابراین <span class=\"chem\" dir=\"ltr\">Pt</span> و <span class=\"chem\" dir=\"ltr\">Zn</span> انرژی فعال‌سازی یکسانی ایجاد نمی‌کنند و سرعت واکنش با آن‌ها متفاوت است.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> هر بخش <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره (پاسخ + دلیل)</p>", "hasFigure": false}, {"id": "q-b-15", "track": "core", "topic": "رسانایی الکتریکی محلول‌ها", "minutes": 3, "difficulty": 2, "mark": 1.25, "stem": "چهار محلول ناشناخته با برچسب <span class=\"num\" dir=\"ltr\">(۱)</span> تا <span class=\"num\" dir=\"ltr\">(۴)</span>، از نظر رسانایی الکتریکی و <span class=\"chem\" dir=\"ltr\">pH</span> بررسی و در جدول زیر ثبت شده‌اند.", "body": "<table class=\"data-table\"><tr><th>محلول</th><th>(۱)</th><th>(۲)</th><th>(۳)</th><th>(۴)</th></tr><tr><td>رسانایی</td><td>زیاد</td><td>ندارد</td><td>کم</td><td>کم</td></tr><tr><td dir=\"ltr\">pH</td><td>۱۳</td><td>۷</td><td>۴/۳</td><td>۱۰/۶</td></tr></table>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>کدام برچسب مربوط به گلوکز (ترکیبی مولکولی که در آب یونیده نمی‌شود) است؟ دلیل بیاورید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>با توجه به داده‌ها، برچسب مربوط به هر یک از محلول‌های استیک‌اسید، پتاسیم‌هیدروکسید و آمونیاک را مشخص کنید.</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">برچسب <span class=\"num\" dir=\"ltr\">(۲)</span></p><p class=\"awhy\">گلوکز ترکیبی مولکولی است و در آب یون تولید نمی‌کند؛ پس محلول آن رسانا نیست و <span class=\"chem\" dir=\"ltr\">pH</span> آن مانند آب خالص، برابر <span class=\"num\" dir=\"ltr\">۷</span> است.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\">استیک‌اسید <span class=\"num\" dir=\"ltr\">(۳)</span>، پتاسیم‌هیدروکسید <span class=\"num\" dir=\"ltr\">(۱)</span>، آمونیاک <span class=\"num\" dir=\"ltr\">(۴)</span></p><p class=\"awhy\"><span class=\"num\" dir=\"ltr\">(۳)</span>: <span class=\"chem\" dir=\"ltr\">pH</span> اسیدی (<span class=\"num\" dir=\"ltr\">۴/۳</span>) با رسانایی کم → اسید ضعیف یعنی استیک‌اسید. <span class=\"num\" dir=\"ltr\">(۱)</span>: رسانایی زیاد و <span class=\"chem\" dir=\"ltr\">pH</span> بسیار بالا (<span class=\"num\" dir=\"ltr\">۱۳</span>) → باز قوی یعنی پتاسیم‌هیدروکسید. <span class=\"num\" dir=\"ltr\">(۴)</span>: <span class=\"chem\" dir=\"ltr\">pH</span> بازی ولی رسانایی کم (<span class=\"num\" dir=\"ltr\">۱۰/۶</span>) → باز ضعیف یعنی آمونیاک.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)، ب هر تطبیق درست <span class=\"num\" dir=\"ltr\">۰/۲۵</span> نمره</p>", "hasFigure": false}, {"id": "q-b-16", "track": "core", "topic": "خوردگی و حفاظت فلزات", "minutes": 3, "difficulty": 2, "mark": 1.5, "stem": "شکل زیر، دو قطعه آهن را نشان می‌دهد که هر یک با لایه نازکی از فلز <span class=\"chem\" dir=\"ltr\">A</span> یا فلز <span class=\"chem\" dir=\"ltr\">B</span> پوشیده شده‌اند. در هر دو قطعه، پوشش فلزی دچار خراشیدگی شده و سطح آهن زیرین در معرض هوا و رطوبت قرار گرفته است. مشاهده شد که تنها در قطعه پوشیده‌شده با فلز <span class=\"chem\" dir=\"ltr\">A</span>، خود فلز پوششی (نه آهن) اکسید می‌شود.", "body": "<figure class=\"figure-card\" role=\"img\" aria-label=\"دو قطعه آهن پوشیده‌شده با فلز A یا فلز B (با خراش)\"><svg viewBox=\"0 0 330 120\">\n<g font-family=\"Vazirmatn, Tahoma, sans-serif\" font-size=\"11\">\n <rect x=\"20\" y=\"40\" width=\"110\" height=\"30\" fill=\"#8D7883\"/>\n <rect x=\"20\" y=\"36\" width=\"110\" height=\"6\" fill=\"#8E4FBF\"/>\n <rect x=\"60\" y=\"36\" width=\"14\" height=\"34\" fill=\"#8D7883\"/>\n <text class=\"fx\" x=\"75\" y=\"90\" text-anchor=\"middle\">آهن با پوشش فلز A (با خراش)</text>\n <rect x=\"190\" y=\"40\" width=\"110\" height=\"30\" fill=\"#8D7883\"/>\n <rect x=\"190\" y=\"36\" width=\"110\" height=\"6\" fill=\"#1B7A54\"/>\n <rect x=\"230\" y=\"36\" width=\"14\" height=\"34\" fill=\"#8D7883\"/>\n <text class=\"fx\" x=\"245\" y=\"90\" text-anchor=\"middle\">آهن با پوشش فلز B (با خراش)</text>\n</g></svg><figcaption class=\"figure-caption\">دو قطعه آهن پوشیده‌شده با فلز A یا فلز B (با خراش)</figcaption></figure>\n<div class=\"part\"><span class=\"letter\">آ</span><div class=\"part-body\"><p>کدام فلز، <span class=\"chem\" dir=\"ltr\">A</span> یا <span class=\"chem\" dir=\"ltr\">B</span>، کاهنده قوی‌تری نسبت به آهن است؟ توضیح دهید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">ب</span><div class=\"part-body\"><p>نیم‌واکنش کاهش اکسیژن هوا (در محیط خنثی مرطوب) را که در این خوردگی نقش دارد، بنویسید.</p></div></div>\n<div class=\"part\"><span class=\"letter\">پ</span><div class=\"part-body\"><p>کدام‌یک از فلزهای قلع <span class=\"chem\" dir=\"ltr\">(Sn)</span> یا روی <span class=\"chem\" dir=\"ltr\">(Zn)</span> برای پوشش قوطی‌های نگه‌داری مواد غذایی مناسب‌تر است؟ چرا؟</p></div></div>", "answer": "<div class=\"arow\"><span class=\"akey\">آ</span><div class=\"abody\"><p class=\"aval\">فلز <span class=\"chem\" dir=\"ltr\">A</span></p><p class=\"awhy\">در قطعهٔ خراشیده، فلز پوششی <span class=\"chem\" dir=\"ltr\">A</span> به‌جای آهن اکسید می‌شود؛ یعنی راحت‌تر الکترون می‌دهد و پتانسیل کاهش کمتری از آهن دارد، پس کاهندهٔ قوی‌تری است (حفاظت کاتدی). فلز <span class=\"chem\" dir=\"ltr\">B</span> پتانسیل کاهش بیشتری از آهن دارد و در محل خراش، آهن خورده می‌شود.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">ب</span><div class=\"abody\"><p class=\"aval\"><span class=\"chem\" dir=\"ltr\">O₂(g) + 2H₂O(l) + 4e⁻ → 4OH⁻(aq)</span></p><p class=\"awhy\">در محیط خنثی و مرطوب، اکسیژن هوا کاهیده می‌شود و یون هیدروکسید می‌سازد.</p></div></div>\n<div class=\"arow\"><span class=\"akey\">پ</span><div class=\"abody\"><p class=\"aval\">قلع، <span class=\"chem\" dir=\"ltr\">Sn</span></p><p class=\"awhy\">قلع با مواد غذایی واکنش نمی‌دهد و آن‌ها را فاسد یا سمی نمی‌کند؛ اما روی با اسیدهای موجود در مواد غذایی واکنش می‌دهد، بنابراین برای قوطی مواد غذایی مناسب نیست.</p></div></div>\n<p class=\"agrade\"><b>بارم‌بندی:</b> آ <span class=\"num\" dir=\"ltr\">۰/۵</span>، ب <span class=\"num\" dir=\"ltr\">۰/۵</span>، پ <span class=\"num\" dir=\"ltr\">۰/۵</span> نمره (پاسخ + دلیل)</p>", "hasFigure": true}]</script>
+<script>(function(){
+'use strict';
+
+/* ---------- content layer (invisible to the student) ---------- */
+var QS;
+try { QS = JSON.parse(document.getElementById('content').textContent); } catch(e){ QS = []; }
+
+/* rapid warm-up first, then the full descriptive questions */
+var ORDER = QS.filter(function(q){ return q.track === 'rapid'; })
+              .concat(QS.filter(function(q){ return q.track !== 'rapid'; }));
+var N = ORDER.length;
+var WARM = QS.filter(function(q){ return q.track === 'rapid'; }).length;
+
+/* ---------- helpers ---------- */
+var D = '۰۱۲۳۴۵۶۷۸۹';
+function fa(n){ return String(n).replace(/[0-9]/g, function(d){ return D[+d]; }); }
+function $(id){ return document.getElementById(id); }
+function on(el, fn){ if(el) el.addEventListener('click', fn); }
+
+function wireTf(container){
+  if(!container) return;
+  Array.prototype.forEach.call(container.querySelectorAll('.tf-part'), function(part){
+    var btns = part.querySelectorAll('.tf-btn');
+    Array.prototype.forEach.call(btns, function(b){
+      on(b, function(){
+        if(b.disabled) return;
+        Array.prototype.forEach.call(btns, function(x){ x.classList.remove('tf-sel'); });
+        b.classList.add('tf-sel');
+        part.setAttribute('data-picked', b.getAttribute('data-choice'));
+      });
+    });
+  });
+}
+function markTf(container){
+  if(!container) return;
+  Array.prototype.forEach.call(container.querySelectorAll('.tf-part'), function(part){
+    var correct = part.getAttribute('data-correct');
+    var picked = part.getAttribute('data-picked');
+    var btns = part.querySelectorAll('.tf-btn');
+    Array.prototype.forEach.call(btns, function(b){
+      b.disabled = true;
+      var v = b.getAttribute('data-choice');
+      if(v === correct) b.classList.add('tf-correct');
+      else if(v === picked && picked !== correct) b.classList.add('tf-wrong');
+    });
+  });
+}
+
+var store = (function(){
+  var ok = true;
+  try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); } catch(e){ ok = false; }
+  var mem = {};
+  return {
+    get: function(k){ try { return ok ? localStorage.getItem(k) : (mem[k] || null); } catch(e){ return null; } },
+    set: function(k,v){ try { ok ? localStorage.setItem(k,v) : (mem[k]=v); } catch(e){} },
+    del: function(k){ try { ok ? localStorage.removeItem(k) : delete mem[k]; } catch(e){} }
+  };
+})();
+var K_INTRO = 'chem12examB_intro_seen', K_SESS = 'chem12examB_session';
+
+/* ---------- application layer ---------- */
+var S = { list: [], i: 0, mode: 'main', results: {}, seen: 0 };
+function persist(){ store.set(K_SESS, JSON.stringify(S)); }
+
+var cur = 's-home';
+function go(id){
+  if(cur === id) return;
+  var a = $(cur); if(a) a.classList.remove('on');
+  var b = $(id); b.classList.add('on');
+  cur = id;
+  var sc = b.querySelector('.scroll'); if(sc) sc.scrollTop = 0;
+  var isSheet = (id === 's-sheet');
+  Array.prototype.forEach.call(document.querySelectorAll('.vtab'), function(t){
+    t.classList.toggle('on', (t.getAttribute('data-view') === 'sheet') === isSheet);
+  });
+}
+
+function tally(){
+  var t = { strong:0, shaky:0, weak:0 };
+  for(var k in S.results){ if(Object.prototype.hasOwnProperty.call(S.results,k) && t[S.results[k]] !== undefined) t[S.results[k]]++; }
+  return t;
+}
+function needsReview(){
+  return ORDER.filter(function(q){ var v = S.results[q.id]; return v === 'weak' || v === 'shaky'; });
+}
+
+/* ---------- question rendering ---------- */
+function faMark(n){ var s = (Math.round(n*100)/100).toString().replace('.', '/'); return fa(s); }
+function stageLabel(){
+  if(S.mode === 'review') return 'مرحله ۲ · مرور نقطه‌های ضعیف';
+  var q = S.list[S.i];
+  return q ? (faMark(q.mark) + ' نمره') : '';
+}
+
+function paint(){
+  var q = S.list[S.i];
+  if(!q){ return S.mode === 'review' ? finalScreen() : reviewScreen(); }
+
+  var total = S.list.length;
+  $('q-pos').textContent = 'سؤال ' + fa(S.i + 1) + ' از ' + fa(total);
+  $('q-stage').textContent = stageLabel();
+  $('q-track').style.width = ((S.i) / total * 100) + '%';
+
+  $('q-topic').textContent = q.topic;
+  $('q-stem').innerHTML = q.stem;
+  $('q-body').innerHTML = q.body;
+  wireTf($('q-body'));
+  $('q-think').hidden = false;
+  $('q-after').innerHTML = '';
+
+  $('q-dock').innerHTML = '<button class="btn btn-1" id="q-reveal">نمایش پاسخ</button>';
+  on($('q-reveal'), reveal);
+  persist();
+}
+
+function reveal(){
+  var q = S.list[S.i];
+  $('q-think').hidden = true;
+  markTf($('q-body'));
+  $('q-after').innerHTML =
+    '<div class="reveal">' +
+      '<div class="ans"><div class="ans-h"><i>✓</i><span>پاسخ تشریحی</span></div><div class="ans-b">' + q.answer + '</div></div>' +
+      '<div class="assess">' +
+        '<p class="assess-q">چقدر روی این سؤال مسلط بودی؟</p>' +
+        '<p class="assess-h">خودت مشخص می‌کنی — همین تعیین می‌کنه آخر چی رو دوباره مرور کنی.</p>' +
+        '<div class="opts">' +
+          '<button class="opt" data-v="strong"><i></i>کامل بلد بودم</button>' +
+          '<button class="opt" data-v="shaky"><i></i>با شک حل کردم</button>' +
+          '<button class="opt" data-v="weak"><i></i>بلد نبودم</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+
+  $('q-dock').innerHTML = '<p class="meta center">یکی رو انتخاب کن تا بریم سؤال بعد</p>';
+
+  Array.prototype.forEach.call(document.querySelectorAll('.opt'), function(b){
+    on(b, function(){
+      b.classList.add('sel');
+      grade(b.getAttribute('data-v'));
+    });
+  });
+
+  var sc = $('q-scroll');
+  var box = $('q-after');
+  try { box.scrollIntoView({ behavior:'smooth', block:'start' }); }
+  catch(e){ sc.scrollTop = sc.scrollHeight; }
+}
+
+function grade(v){
+  var q = S.list[S.i];
+  S.results[q.id] = v;
+  persist();
+  $('q-dock').innerHTML = '<button class="btn btn-1" id="q-next">' +
+    (S.i + 1 < S.list.length ? 'سؤال بعدی <span class="arw">←</span>' :
+     (S.mode === 'review' ? 'جمع‌بندی نهایی' : 'دیدن نتیجه')) + '</button>';
+  on($('q-next'), function(){ S.i++; persist(); paint(); });
+}
+
+/* ---------- review ---------- */
+function reviewScreen(){
+  var t = tally(), list = needsReview();
+  $('rv-g').textContent = fa(t.strong);
+  $('rv-y').textContent = fa(t.shaky);
+  $('rv-r').textContent = fa(t.weak);
+
+  if(list.length){
+    $('rv-title').textContent = 'مرور آخر';
+    $('rv-text').textContent = fa(list.length) + ' نقطه هنوز ارزش مرور دوباره داره. فقط همین‌ها رو دوباره می‌بینی، نه کل آزمون رو.';
+    var h = '';
+    list.forEach(function(q){
+      h += '<div class="topic ' + (S.results[q.id] === 'weak' ? 'r' : 'y') + '"><i></i>' + q.topic +
+           '<em>' + (S.results[q.id] === 'weak' ? 'بلد نبودم' : 'با شک') + '</em></div>';
+    });
+    $('rv-list').innerHTML = h;
+    $('rv-go').textContent = 'مرور این ' + fa(list.length) + ' سؤال';
+    $('rv-go').hidden = false;
+    $('rv-skip').hidden = false;
+    on($('rv-go'), startReview);
+  } else {
+    $('rv-title').textContent = 'همه رو کامل بلد بودی';
+    $('rv-text').textContent = 'نقطه ضعیفی برای مرور باقی نمونده.';
+    $('rv-list').innerHTML = '';
+    $('rv-go').hidden = true;
+    $('rv-skip').textContent = 'دیدن جمع‌بندی';
+  }
+  go('s-review');
+  persist();
+}
+
+var reviewStarted = false;
+function startReview(){
+  var list = needsReview();
+  if(!list.length) return finalScreen();
+  S.list = list; S.i = 0; S.mode = 'review'; reviewStarted = true;
+  go('s-quiz'); paint();
+}
+
+/* ---------- final ---------- */
+function finalScreen(){
+  var t = tally();
+  var done = t.strong + t.shaky + t.weak;
+  var pct = done ? Math.round((t.strong * 100 + t.shaky * 55) / done) : 0;
+
+  $('fn-g').textContent = fa(t.strong);
+  $('fn-y').textContent = fa(t.shaky);
+  $('fn-r').textContent = fa(t.weak);
+
+  var t0 = Date.now();
+  (function tick(){
+    var p = Math.min((Date.now() - t0) / 1000, 1);
+    $('fn-num').textContent = fa(Math.round(pct * (1 - Math.pow(1 - p, 3)))) + '٪';
+    if(p < 1) requestAnimationFrame(tick);
+  })();
+  setTimeout(function(){ $('fn-ring').style.strokeDashoffset = String(408 - 408 * pct / 100); }, 90);
+
+  $('fn-title').textContent = 'تموم شد.';
+  $('fn-text').textContent = pct >= 85
+    ? 'مهم‌ترین مباحث رو پوشش دادی و جاهای لغزنده رو دیدی. خوب پیش رفتی.'
+    : pct >= 60
+    ? 'وضعیتت قابل قبوله و می‌دونی دقیقاً کجاها لنگ می‌زنی.'
+    : 'مهم‌ترین کار رو کردی: نقطه‌ضعف‌هات رو پیدا کردی. همین‌ها رو مرور کن.';
+
+  var byTopic = {};
+  ORDER.forEach(function(q){
+    var v = S.results[q.id];
+    if(v === 'weak' || v === 'shaky'){ byTopic[q.topic] = (byTopic[q.topic] || 0) + (v === 'weak' ? 2 : 1); }
+  });
+  var keys = Object.keys(byTopic).sort(function(a,b){ return byTopic[b] - byTopic[a]; }).slice(0, 3);
+  if(keys.length){
+    var h = '<div class="card" style="margin-top:16px"><h3 class="sub">قبل از امتحان این ' + fa(keys.length) + ' موضوع رو یک بار دیگه ببین</h3><div style="margin-top:12px">';
+    keys.forEach(function(k){ h += '<div class="topic r"><i></i>' + k + '</div>'; });
+    $('fn-focus').innerHTML = h + '</div></div>';
+  } else {
+    $('fn-focus').innerHTML = '<div class="card-flat" style="margin-top:16px"><p class="meta" style="color:var(--success)">موضوعی برای مرور دوباره باقی نمونده.</p></div>';
+  }
+
+  var tips = [
+    'روابط و عددهای اصلی رو یک‌بار روی کاغذ بنویس.',
+    'دیگه سراغ مبحث جدید نرو؛ فقط همین‌ها رو تثبیت کن.',
+    'سر جلسه، اول سؤال‌هایی رو بزن که مطمئنی.',
+    'خواب کافی از یک ساعت مرور اضافه مهم‌تره.'
+  ];
+  $('fn-tips').innerHTML = tips.map(function(x){ return '<div class="chk"><i>✓</i><span>' + x + '</span></div>'; }).join('');
+
+  var rest = needsReview();
+  var again = $('fn-again');
+  if(rest.length && !reviewStarted){
+    again.hidden = false;
+    again.textContent = 'مرور ' + fa(rest.length) + ' سؤال ضعیف';
+    on(again, startReview);
+  } else { again.hidden = true; }
+
+  go('s-final');
+  persist();
+}
+
+/* ---------- entry ---------- */
+function begin(fresh){
+  if(fresh){ S = { list: ORDER.slice(), i: 0, mode: 'main', results: {}, seen: 0 }; }
+  go('s-quiz'); paint();
+}
+
+on($('btn-start'), function(){ begin(true); });
+on($('fn-reset'), function(){
+  store.del(K_SESS);
+  reviewStarted = false;
+  S = { list: ORDER.slice(), i: 0, mode: 'main', results: {}, seen: 0 };
+  $('btn-resume').hidden = true;
+  go('s-home');
+});
+on($('rv-skip'), finalScreen);
+
+/* one-time creator credit */
+var veil = $('veil');
+if(!store.get(K_INTRO)) veil.classList.add('on');
+on($('veil-ok'), function(){ veil.classList.remove('on'); store.set(K_INTRO, '1'); });
+on(veil, function(e){ if(e.target === veil){ veil.classList.remove('on'); store.set(K_INTRO, '1'); } });
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && veil.classList.contains('on')){ veil.classList.remove('on'); store.set(K_INTRO, '1'); }
+});
+
+/* resume after an accidental refresh */
+(function(){
+  var raw = store.get(K_SESS);
+  if(!raw) return;
+  try {
+    var p = JSON.parse(raw);
+    if(!p || !p.list || !p.list.length) return;
+    var answered = Object.keys(p.results || {}).length;
+    if(!answered) return;
+    S = p;
+    var btn = $('btn-resume');
+    btn.hidden = false;
+    btn.textContent = 'ادامه از سؤال ' + fa(Math.min(S.i + 1, S.list.length));
+    on(btn, function(){
+      if(S.i >= S.list.length){ return S.mode === 'review' ? finalScreen() : reviewScreen(); }
+      go('s-quiz'); paint();
+    });
+  } catch(e){}
+})();
+
+/* ---------- sheet (exam / worksheet) view ---------- */
+var sheetBuilt = false;
+function buildSheet(){
+  if(sheetBuilt) return;
+  sheetBuilt = true;
+  var totalMark = ORDER.reduce(function(a,q){ return a + (q.mark || 0); }, 0);
+  var h = '<div class="sheet-head"><h2>برگه سؤالات — آزمون B — سطح سخت</h2><p>' + fa(ORDER.length) + ' سؤال تشریحی · نمره کل ' + faMark(totalMark) + '</p></div>';
+  ORDER.forEach(function(q, idx){
+    h += '<div class="sheet-card">' +
+      '<div class="sheet-card-h"><span class="sheet-num">' + fa(idx+1) + '</span><span class="sheet-topic">' + q.topic + '</span><span class="sheet-mark">' + faMark(q.mark) + ' نمره</span></div>' +
+      '<div class="sheet-stem">' + q.stem + '</div>' +
+      '<div class="sheet-body qbody">' + q.body + '</div>' +
+      '<button type="button" class="sheet-reveal-btn">نمایش پاسخ</button>' +
+      '<div class="sheet-ans"><div class="ans-h"><i>✓</i><span>پاسخ تشریحی</span></div><div class="ans-b">' + q.answer + '</div></div>' +
+    '</div>';
+  });
+  var list = $('sheet-list');
+  list.innerHTML = h;
+  wireTf(list);
+  Array.prototype.forEach.call(list.querySelectorAll('.sheet-reveal-btn'), function(btn){
+    on(btn, function(){
+      var card = btn.parentNode;
+      var ans = card.querySelector('.sheet-ans');
+      if(ans.classList.contains('on')) return;
+      ans.classList.add('on');
+      markTf(card);
+      btn.textContent = 'پاسخ نمایش داده شد';
+      btn.disabled = true;
+    });
+  });
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('.vtab'), function(t){
+  on(t, function(){
+    Array.prototype.forEach.call(document.querySelectorAll('.vtab'), function(x){ x.classList.remove('on'); });
+    t.classList.add('on');
+    if(t.getAttribute('data-view') === 'sheet'){
+      buildSheet();
+      go('s-sheet');
+    } else {
+      var raw = store.get(K_SESS);
+      if(raw){
+        try {
+          var p = JSON.parse(raw);
+          if(p && p.list && p.list.length && Object.keys(p.results || {}).length){
+            S = p;
+            if(S.i >= S.list.length){ if(S.mode === 'review') finalScreen(); else reviewScreen(); return; }
+            go('s-quiz'); paint(); return;
+          }
+        } catch(e){}
+      }
+      go('s-home');
+    }
+  });
+});
+
+/* never surface raw errors to a student */
+window.addEventListener('error', function(e){ e.preventDefault && e.preventDefault(); });
+})();
+</script>
+<script>
+/* ---- progress cookie bridge (read by the version chooser page) ---- */
+(function(){
+  var KEY = 'chem12examB_session', CK = 'chem12_progress_b', TOTAL = 16;
+  function setCookie(n, v){
+    try { document.cookie = n + '=' + encodeURIComponent(v) + '; path=/; max-age=' + (365*86400) + '; samesite=lax'; } catch(e){}
+  }
+  function sync(){
+    try {
+      var raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      var S = JSON.parse(raw), res = S.results || {};
+      var done = 0, strong = 0, shaky = 0, weak = 0;
+      for(var k in res){
+        if(!Object.prototype.hasOwnProperty.call(res, k)) continue;
+        done++;
+        if(res[k] === 'strong') strong++;
+        else if(res[k] === 'shaky') shaky++;
+        else if(res[k] === 'weak') weak++;
+      }
+      setCookie(CK, JSON.stringify({
+        done: done, total: TOTAL, strong: strong, shaky: shaky, weak: weak,
+        i: S.i || 0, mode: S.mode || 'main', ts: Date.now()
+      }));
+      setCookie('chem12_last_exam', 'b');
+    } catch(e){}
+  }
+  sync();
+  setInterval(sync, 1500);
+  document.addEventListener('visibilitychange', sync);
+  window.addEventListener('beforeunload', sync);
+})();
+</script>
+</body>
+</html>
