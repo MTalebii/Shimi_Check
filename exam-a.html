@@ -66,7 +66,7 @@ button{font:inherit;color:inherit;margin:0}
     radial-gradient(100% 50% at 0% 100%, rgba(34,211,238,.10) 0%, transparent 60%),
     var(--paper);
   display:flex; flex-direction:column;
-  overflow:visible;
+  overflow:hidden;
 }
 @media (min-width:600px){#app{box-shadow:0 0 0 1px var(--hair),0 30px 80px rgba(0,0,0,.5)}}
 
@@ -98,7 +98,7 @@ button{font:inherit;color:inherit;margin:0}
 .screen{display:none;flex:1 1 auto;min-height:0;flex-direction:column}
 .screen.on{display:flex;animation:enter var(--base) var(--ease) both}
 @keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.scroll{flex:1 1 auto;min-height:0}
+.scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;touch-action:pan-y}
 .pad{padding:var(--s6) var(--s5) var(--s8)}
 @media (max-width:360px){.pad{padding:var(--s5) var(--s4) var(--s7)}}
 .dock{
@@ -386,13 +386,12 @@ text.star{font-size:14px;fill:#7C5CFF}
 .qwhy b{font-weight:900;color:var(--ink)}
 @media(max-width:360px){.qn{font-size:10.5px}.qwhy{font-size:11.5px}}
 
-/* ============ mobile-scroll-v5: native document scrolling ============ */
+
 html{height:auto;-webkit-text-size-adjust:100%}
 html,body{min-height:100%}
-#app{overflow-x:clip}
-body{overscroll-behavior-y:auto}
-#app{overflow:visible!important}
-.scroll{overflow:visible!important;overflow-y:visible!important;height:auto!important}
+
+
+
 .screen{min-height:0}
 img,svg,video,canvas{max-width:100%;height:auto}
 table{max-width:100%}
@@ -425,6 +424,57 @@ table{max-width:100%}
   .mast,.viewtabs{position:static}
 }
 
+
+/* ===== mobile-v6: responsive only (no scroll override) ===== */
+/* Use dvh for stable app frame on mobile browsers */
+#app{
+  height:100svh; height:100dvh;
+  min-height:unset;
+}
+.mast{position:-webkit-sticky;position:sticky;top:0;z-index:40;background:rgba(12,15,32,.94)}
+.viewtabs{position:-webkit-sticky;position:sticky;top:var(--mast-h,56px);z-index:30;background:rgba(12,15,32,.94)}
+/* dock already sticky-bottom in original CSS */
+.dock{position:-webkit-sticky;position:sticky;bottom:0;z-index:35;
+  background:linear-gradient(to top,var(--paper) 62%,rgba(12,15,32,.0));}
+/* fluid type + spacing */
+img,svg,video,canvas{max-width:100%;height:auto}
+table{max-width:100%}
+@media (max-width:430px){
+  body{font-size:15.5px}
+  .pad{padding:18px 14px 26px}
+  .eq{font-size:13.5px}
+  .astep{font-size:12.5px}
+  .dtable{font-size:12.5px}
+  .qn{font-size:10.5px}
+  .cred span{display:none}
+  .cred{padding:3px}
+}
+@media (max-width:340px){
+  .pad{padding:16px 11px 22px}
+  .dtable{font-size:11.5px}
+}
+@media (min-width:860px){#app{max-width:680px}}
+@media (orientation:landscape) and (max-height:520px){
+  .mast,.viewtabs{position:static}
+  #app{height:auto;min-height:100svh;min-height:100dvh}
+}
+
+/* ===== touch-scroll fix ===== */
+.scroll{
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y pinch-zoom !important;
+  overscroll-behavior-y: contain;
+  will-change: scroll-position;
+}
+.screen.on{
+  /* must fill the flex parent so inner .scroll gets a finite height */
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+}
+/* prevent any ancestor stealing pointer events from the scroll container */
+#app, .screen, .screen.on { -webkit-overflow-scrolling: unset; }
+.scroll * { pointer-events: auto; }
 
 /* home-link: back to version chooser */
 .home-link{position:fixed;top:calc(env(safe-area-inset-top) + 10px);inset-inline-start:10px;z-index:120;
