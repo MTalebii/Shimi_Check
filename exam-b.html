@@ -66,7 +66,7 @@ button{font:inherit;color:inherit;margin:0}
     radial-gradient(100% 50% at 0% 100%, rgba(34,211,238,.10) 0%, transparent 60%),
     var(--paper);
   display:flex; flex-direction:column;
-  overflow:hidden;
+  overflow:visible;
 }
 @media (min-width:600px){#app{box-shadow:0 0 0 1px var(--hair),0 30px 80px rgba(0,0,0,.5)}}
 
@@ -75,7 +75,7 @@ button{font:inherit;color:inherit;margin:0}
   flex:0 0 auto; display:flex; align-items:center; justify-content:space-between;
   gap:var(--s3); padding:calc(var(--sat) + 10px) var(--s4) 10px;
   background:rgba(12,15,32,.75); backdrop-filter:saturate(1.4) blur(14px);
-  border-bottom:1px solid var(--hair); position:relative; z-index:20;
+  border-bottom:1px solid var(--hair); position:sticky; top:0; z-index:40;
 }
 .mast::after{content:'';position:absolute;inset-inline:0;bottom:-1px;height:1px;background:var(--grad);opacity:.55}
 .mast-id{font-size:12px;font-weight:700;letter-spacing:.02em;color:var(--ink-2);display:flex;align-items:center;gap:7px}
@@ -98,13 +98,13 @@ button{font:inherit;color:inherit;margin:0}
 .screen{display:none;flex:1 1 auto;min-height:0;flex-direction:column}
 .screen.on{display:flex;animation:enter var(--base) var(--ease) both}
 @keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.scroll{flex:1 1 auto;min-height:0}
 .pad{padding:var(--s6) var(--s5) var(--s8)}
 @media (max-width:360px){.pad{padding:var(--s5) var(--s4) var(--s7)}}
 .dock{
   flex:0 0 auto; padding:var(--s3) var(--s5) calc(var(--sab) + var(--s4));
   background:linear-gradient(to top,var(--paper) 60%,rgba(12,15,32,0));
-  position:relative; z-index:10;
+  position:sticky; bottom:0; z-index:35;
 }
 
 /* ============ TYPE SCALE ============ */
@@ -392,6 +392,46 @@ text.star{font-size:14px;fill:#7C5CFF}
 .qwhy b{font-weight:900;color:var(--ink)}
 @media(max-width:360px){.qn{font-size:10.5px}.qwhy{font-size:11.5px}}
 
+/* ============ mobile-scroll-v5: native document scrolling ============ */
+html{height:auto;-webkit-text-size-adjust:100%}
+html,body{min-height:100%}
+#app{overflow-x:clip}
+body{overscroll-behavior-y:auto}
+#app{overflow:visible!important}
+.scroll{overflow:visible!important;overflow-y:visible!important;height:auto!important}
+.screen{min-height:0}
+img,svg,video,canvas{max-width:100%;height:auto}
+table{max-width:100%}
+.mast{position:-webkit-sticky;position:sticky;top:0;z-index:40;background:rgba(12,15,32,.94)}
+.viewtabs{position:-webkit-sticky;position:sticky;top:0;z-index:30;background:rgba(12,15,32,.94)}
+.dock{
+  position:-webkit-sticky;position:sticky;bottom:0;z-index:35;
+  background:linear-gradient(to top,var(--paper) 62%,rgba(12,15,32,.90));
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+}
+.pad>*{scroll-margin-top:96px}
+.sheet-card,.qcard,#q-after{scroll-margin-top:96px}
+/* fluid type + spacing */
+@media (max-width:430px){
+  body{font-size:15.5px}
+  .pad{padding:18px 14px 26px}
+  .eq{font-size:13.5px}
+  .astep{font-size:12.5px}
+  .dtable{font-size:12.5px}
+  .qn{font-size:10.5px}
+  .cred span{display:none}
+  .cred{padding:3px}
+}
+@media (max-width:340px){
+  .pad{padding:16px 11px 22px}
+  .dtable{font-size:11.5px}
+}
+@media (min-width:860px){#app{max-width:680px}}
+@media (orientation:landscape) and (max-height:520px){
+  .mast,.viewtabs{position:static}
+}
+
+
 /* home-link: back to version chooser */
 .home-link{position:fixed;top:calc(env(safe-area-inset-top) + 10px);inset-inline-start:10px;z-index:120;
   width:40px;height:40px;border-radius:14px;display:flex;align-items:center;justify-content:center;
@@ -399,6 +439,8 @@ text.star{font-size:14px;fill:#7C5CFF}
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border:1px solid var(--hair-2);box-shadow:var(--e2);transition:transform .2s var(--ease),color .2s var(--ease)}
 .home-link:active{transform:scale(.92)}
+.mast{padding-inline-start:58px}
+.viewtabs{padding-inline-start:12px}
 @media(hover:hover){.home-link:hover{color:var(--ink)}}
 </style>
 </head>
@@ -603,7 +645,8 @@ function go(id){
   var a = $(cur); if(a) a.classList.remove('on');
   var b = $(id); b.classList.add('on');
   cur = id;
-  var sc = b.querySelector('.scroll'); if(sc) sc.scrollTop = 0;
+  try{ window.scrollTo(0,0); }catch(e){}
+  var de = document.scrollingElement || document.documentElement; if(de) de.scrollTop = 0;
   var isSheet = (id === 's-sheet');
   Array.prototype.forEach.call(document.querySelectorAll('.vtab'), function(t){
     t.classList.toggle('on', (t.getAttribute('data-view') === 'sheet') === isSheet);
@@ -675,7 +718,7 @@ function reveal(){
     });
   });
 
-  var sc = $('q-scroll');
+  var sc = document.scrollingElement || document.documentElement;
   var box = $('q-after');
   try { box.scrollIntoView({ behavior:'smooth', block:'start' }); }
   catch(e){ sc.scrollTop = sc.scrollHeight; }
